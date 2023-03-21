@@ -1,0 +1,2595 @@
+{
+	".source.mbdyn": {
+		"reference-definition": {
+		  "prefix": "reference:",
+		  "body": [
+			"reference: ${1:<label>},",
+			"  ${2:[name, \"name\",]},",
+			"  ${3:(Vec3)<absolute_position>},",
+			"  ${4:(OrientationMatrix)<absolute_orientation_matrix>},",
+			"  ${5:(Vec3)<absolute_velocity>},",
+			"  ${6:(Vec3)<absolute_angular_velocity>}",
+			"  ;"],
+		  "description": "Reference frame."
+		},
+		"costlaw-definition": {
+		  "prefix": "constitutive law:",
+		  "body": [
+			"constitutive law: ${1:<label>},",
+			"  ${2:[name, \"<name>\"], }",
+			"  ${3:(integer)<dim>}, ${4:(ConstitutiveLaw<(integer)<dim>D>>)<constitutive_law>}",
+			"  ${5:[, prestress, (Entity)<prestress>]}",
+			"  ${6:[, prestrain, (TplDriveCaller<<Entity>>)<prestrain>]}",
+			"  ;"],
+		  "description": "Constitutive law"
+		},
+		"c81-data-definition": {
+		  "prefix": "c81 data:",
+		  "body": [
+			"c81 data: ${1:<label>},",
+			"  ${2:[name, \"<name>\", ]}",
+			"  ${3:\"<filename>\"}",
+			"  ${4:[, tolerance, (real)<tolerance>]}",
+			"  ${5:[, {free format | nrel | fc511 \\}}",
+			"  ${6:[, flip ]}",
+			"  ${7:[, echo, \"<output_file_name>\" [, free format] ]}",
+			"  ;"],
+		  "description": "c81 airfoil data"
+		},
+		"drive-definition": {
+		  "prefix": "drive caller:",
+		  "body": [
+			"drive caller: ${1:<label>},",
+			"  ${2:[ name, \"<name>\", ]}",
+			"  ${3:(DriveCaller)<drive_caller>}",
+			"  ;"],
+		  "description": "Drive caller"
+		},
+		"drive-array": {
+		  "prefix": "array",
+		  "body": [
+			"array,",
+			"  ${1:(integer)<num_drives>},",
+			"    ${2:(DriveCaller)<drive_caller_1>}",
+			"    ${3:[, ...]}"],
+		  "description": "Array drive caller: linear combination of drive callers"
+		},
+		"drive-closest-next": {
+		  "prefix": "closest next",
+		  "body": [
+			"closest next,",
+			"  ${1:(real)<initial_time>},",
+			"    ${2|forever,(real)<final_time>|},",
+			"    ${3:(DriveCaller)<increment>}"],
+		  "description": "Closest next driver"
+		},
+		"drive-const": {
+		  "prefix": "const",
+		  "body": ["${1:[const, ]} ${2:(real)<const_coef>}"],
+		  "description": "Const(ant) drive caller"
+		},
+		"drive-cosine": {
+		  "prefix": "cosine",
+		  "body": [
+			"cosine,",
+			"  ${1:(real)<initial_time>},",
+			"  ${2:(real)<angular_velocity>},",
+			"  ${3:(real)<amplitude>},",
+			"  ${4|[-] (integer)<number_of_cycles>,half,one,forever|},",
+			"  ${5:(real)<initial_value>}"],
+		  "description": "Cosine drive caller. f(t) = initial_value + amplitude*(1 - cos(angular_velocity*(t - initial_time)))"
+		},
+		"drive-cubic": {
+		  "prefix": "cubic",
+		  "body": ["cubic,",
+		  "  ${1:(real)<const_coef>},",
+		  "  ${2:(real)<linear_coef>},",
+		  "  ${3:(real)<parabolic_coef>},",
+		  "  ${4:(real)<cubic_coef>}"],
+		  "description": "Cubic drive caller. f(t) = const_coef + linear_coef*t + parabolic_coef*t^2 + cubic_coef*t^3"
+		},
+		"drive-dof": {
+		  "prefix": "dof",
+		  "body": [
+			"dof,",
+			"  ${1:(NodeDof)<driving_dof>},",
+			"  ${2:(DriveCaller)<func_drive>}"],
+		  "description": "Dof drive caller. Reference to a degree of fredom of a node."
+		},
+		"drive-double-ramp": {
+		  "prefix": "double ramp",
+		  "body": [
+			"double ramp,",
+			"  ${1:(real)<a_slope>},",
+			"  ${2:(real)<a_initial_time>},",
+			"  ${3:(real)<a_final_time},",
+			"  ${4:(real)<d_slope>},",
+			"  ${5:(real)<d_initial_time>},",
+			"  ${6|forever,(real)<d_final_time>|},",
+			"  ${7:(real)<initial_value>}"],
+		  "description": "Double ramp drive caller. Ramp from initial_value with slope a_slope from a_initial_time to a_final_time, constant, then ramp with slope d_slope from d_initial_time to d_final_time."
+		},
+		"drive-double-step": {
+		  "prefix": "double step",
+		  "body": [
+			"double step,",
+			"  ${1:(real)<initial_time>},",
+			"  ${2:(real)<final_time>},",
+			"  ${3:(real)<step_value>},",
+			"  ${4:(real)<initial_value>}"],
+		  "description": "Double step drive caller. Step up (or down) to step_value from initial_time to final_time, starting from initial_value "
+		},
+		"drive-drive": {
+		  "prefix": "drive",
+		  "body": [
+			"drive,",
+			"  ${1:(DriveCaller)<drive_caller_1>},",
+			"  ${2:(DriveCaller)<drive_caller_2>}"],
+		  "description": "Drive drive: drive_caller_e is fed to drive_caller_1"
+		},
+		"drive-element": {
+		  "prefix": "element",
+		  "body": [
+			"element,",
+			"  ${1:<element_label>},",
+			"  ${2:<element_type>},",
+			"  ${3:[string, \"<private_data_name>\",]}",
+			"  ${4:(DriveCaller)<func_drive>}"],
+		  "description": "Element drive caller. A reference to the private data of an element is read"
+		},
+		"drive-exponential": {
+		  "prefix": "exponential",
+		  "body": [
+			"exponential,",
+			"  ${1:(real)<amplitude_value>},",
+			"  ${2:(real)<time_constant_value>},",
+			"  ${3:(real)<initial_time>},",
+			"  ${4:(real)<initial_value>}"],
+		  "description": "Exponential drive. f(t) = initial_value + amplitude_value*(1 - exp((-t - initial_time)/time_constant_value)"
+		},
+		"drive-file-drive": {
+		  "prefix": "file",
+		  "body": [
+			"file,",
+			"  ${1:<drive_label>},",
+			"  ${2:[, (integer)<column_number>]}",
+			"  ${4:[, amplitude, (real)<amplitude>]}"],
+		  "description": "File drive caller. Attached to a file drive object defined in the drivers section"
+		},
+		"drive-fourier-series": {
+		  "prefix": "fourier series",
+		  "body": [
+			"fourier series,",
+			"  ${1:(real)<initial_time>},",
+			"  ${2:(real)<angular_velocity>},",
+			"  ${3:(integer)<number_of_terms>},",
+			"    ${4:(real)<a_0>},",
+			"    ${5:(real)<a_1>}, ${6:(real)<a_2>},",
+			"    ${7:[, ...]}",
+			"    ${8|(integer)<number_of_cycles>,one,forever|},",
+			"    ${9:(real)<initial_value>}"],
+		  "description": "Fourier series drive caller."
+		},
+		"drive-frequency-sweep": {
+		  "prefix": "frequency sweep",
+		  "body": [
+			"frequency sweep,",
+			"  ${1:(real)<initial_time>},",
+			"  ${2:(DriveCaller)<angular_velocity_drive>},",
+			"  ${3:(DriveCaller)<amplitude_drive>},",
+			"  ${4:(real)<initial_value>},",
+			"  ${5|forever,(real)<final_time>|},",
+			"  ${6:(real)<final_value>}"],
+		  "description": "Frequency sweep drive caller. Recursively calls angular_velocity_drive and amplitude_drive to regulate the oscillation"
+		},
+		"drive-ginac": {
+		  "prefix": "ginac",
+		  "body": [
+			"ginac,",
+			"  ${1:[symbol, \"<symbol>\"]},",
+			"  ${2:\"<expression>\"}"],
+		  "description": "GiNaC (symbolic) drive caller. WARNING: GiNaC support must be enabled during build!"
+		},
+		"drive-linear": {
+		  "prefix": "linear",
+		  "body": [
+			"linear,",
+			"  ${1:(real)<const_coef>},",
+			"  ${2:(real)<slope_coef>}"],
+		  "description": "Linear drive caller. f(t) = const_coef + slope_coef*t"
+		},
+		"drive-meter": {
+		  "prefix": "meter",
+		  "body": [
+			"meter,",
+			"  ${1:(real)<initial_time>},",
+			"  ${2|forever,(real)<final_time>|}",
+			"  ${3:[, steps, (integer)<steps_between_spikes>]}"],
+		  "description": "Meter drive caller. Has zero value except every steps_between_spikes steps, where it goes to unity"
+		},
+		"drive-mult": {
+		  "prefix": "mult",
+		  "body": [
+			"mult,",
+			"  ${1:(DriveCaller)<drive_caller_1>},",
+			"  ${2:(DriveCaller)<drive_caller_2>}"],
+		  "description": "Mult drive caller. Multiplies the value of two drives."
+		},
+		"drive-node": {
+		  "prefix": "node",
+		  "body": [
+			"node,",
+			"  ${1:<node_label>},",
+			"  ${2:<node_type>},",
+			"  ${3:[string, \"<private_data_name>\",]}",
+			"  ${4:(DriveCaller)<func_drive>}"],
+		  "description": "Node drive caller. A reference to the private data of a node is read"
+		},
+		"drive-parabolic": {
+		  "prefix": "parabolic",
+		  "body": [
+			"parabolic,",
+			"  ${1:(real)<const_coef>},",
+			"  ${2:(real)<linear_coef>},",
+			"  ${3:(real)<parabolic_coef>}"],
+		  "description": "Parabolic drive caller. f(t) = const_coef + linear_coef*t + parabolic_coef*t^2"
+		},
+		"drive-periodic": {
+		  "prefix": "periodic",
+		  "body": [
+			"periodic,",
+			"  ${1:(real)<initial_time>},",
+			"  ${2:(real)<period>},",
+			"  ${3:(DriveCaller)<func_drive>}"],
+		  "description": "Periodic drive caller. f(t) = func_drive(t - initial_time - period*floor((t- initial_time)/period))"
+		},
+		"drive-piecewise-linear": {
+		  "prefix": "piecewise linear",
+		  "body": [
+			"piecewise linear,",
+			"  ${1:(integer)<num_points>},",
+			"    ${2:(real)<point>}, ${3:(real)<value>}",
+			"    ${4:[, ...]}"],
+		  "description": "Piecewise linear drive caller."
+		},
+		"drive-postponed": {
+		  "prefix": "postponed",
+		  "body": ["postponed, ${1:<label>}"],
+		  "description": "Postpones the definition of a drive caller."
+		},
+		"drive-ramp": {
+		  "prefix": "ramp",
+		  "body": ["ramp,",
+		  "  ${1:(real)<slope>},",
+		  "  ${2:(real)<initial_time>},",
+		  "  ${3|forever,(real)<final_time>|},",
+		  "  ${4:(real)<initial_value>}"],
+		  "description": "Ramp drive caller. f(t) = initial_value + slope*(t - initial_time) from initial_time to final_time, then constant"
+		},
+		"drive-random": {
+		  "prefix": "random",
+		  "body": [
+			"random,",
+			"  ${1:(real)<amplitude_value>},",
+			"  ${2:(real)<mean_value>},",
+			"  ${3:(real)<initial_time>},",
+			"  ${4|forever,(real)<final_time>|}",
+			"  ${5:[, steps, (integer)<steps_to_hold_value>]}",
+			"  ${6:[, seed, {time | (real)<seed_value>\\}]}"],
+		  "description": "Random drive caller. Generates pseudo-random values in the range mean +- amplitude_value"
+		},
+		"drive-sample-and-hold": {
+		  "prefix": "sample and hold",
+		  "body": [
+			"sample and hold,",
+			"  ${1:(DriveCaller)<function>},",
+			"  ${2:(DriveCaller)<trigger>}",
+			"  ${3:[, initial value, (real)<initial_value>]}"],
+		  "description": "Sample and hold drive caller. When trigger is non-zero, the value of function is recorded and returned"
+		},
+		"drive-scalar-function": {
+		  "prefix": "scalar function",
+		  "body": [
+			"scalar function, ${1:\"<scalar_function_name>\"}",
+			"  ${2:[, <scalar_function_definition>]}"],
+		  "description": "Scalar function drive."
+		},
+		"drive-sine": {
+		  "prefix": "sine",
+		  "body": [
+			"sine,",
+			"  ${1:(real)<initial_time>},",
+			"  ${2:(real)<angular_velocity>},",
+			"  ${3:(real)<amplitude>},",
+			"  ${4|[-] (integer)<number_of_cycles>,half,one,forever|},",
+			"  ${5:(real)<initial_value>}"],
+		  "description": "Sine drive caller. f(t) = initial_value + amplitude*sin(angular_velocity*(t - initial_time))"
+		},
+		"drive-step": {
+		  "prefix": "step",
+		  "body": [
+			"step,",
+			"  ${1:(real)<initial_time>},",
+			"  ${2:(real)<step_value>},",
+			"  ${3:(real)<initial_value>}"],
+		  "description": "Step drive caller"
+		},
+		"drive-string": {
+		  "prefix": "string",
+		  "body": ["string, \"${1:<expression_string>}\""],
+		  "description": "String drive caller: expression_string is parsed by the math parser. Time and Var are special variables: see input manual for details"
+		},
+		"drive-tanh": {
+		  "prefix": "tanh",
+		  "body": ["tanh,",
+		  "  ${1:(real)<initial_time>},",
+		  "  ${2:(real)<amplitude>},",
+		  "  ${3:(real)<slope>},",
+		  "  ${4:(real)<initial_value>}"],
+		  "description": "Hyperbolic tangent drive. f(t) = initial_value + amplitude*tanh(slope*(t - initial_time))"
+		},
+		"template-drive-caller": {
+		  "prefix": "template drive caller:",
+		  "body": [
+			"template drive caller: ${1:<label>}, ${2|\"<dim_name>\",(integer)<dim>|},",
+			"  ${3:(TplDriveCaller<<dim>D>)<tpl_drive_caller>}",
+			"  ;"],
+		  "description": "Template drive caller"
+		},
+		"module-load": {
+		  "prefix": "module load:",
+		  "body": [
+			"module load: \"${1:<file_name>}\",",
+			"  ${2:[, <module_arglist>]}",
+			"  ;"],
+		  "description": "Module (runtime loadable object) loading"
+		},
+		"setenv": {
+		  "prefix": "setenv:",
+		  "body": [
+			"setenv:",
+			"  ${1:[overwrite, {yes | no | (bool)<overwrite>\\}, ]}",
+			"  ${2:\"<varname> [= <value>]\"}",
+			"  ;"],
+		  "description": "Sets the environment variable varname to value, if given"
+		},
+		"hydraulic-fluid-definition": {
+		  "prefix": "hydraulic fluid:",
+		  "body": [
+			"hydraulic fluid: ${1:<label>},",
+			"  ${2:<fluid_type>, <fluid_properties>}",
+			"  ;"],
+		  "description": "Hydraulic fluid"
+		},
+		"strategy-factor": {
+			  "prefix": "factor",
+			  "body": [
+				  "factor,",
+				  "${1:<reduction_factor>},",
+				  "${2:<steps_before_reduction>},",
+				  "${3:<raise_factor>},",
+				  "${4:<steps_before_raise>},",
+				  "${5:<min_iterations>,}",
+				  "${6:[<max_iterations]};"],
+			  "description": "Strategy for time step change: use factor"
+			},
+			"strategy-change": {
+			  "prefix": "change",
+			  "body": [
+				  "change, ${1:(DriveCaller)<time_step_pattern>};"],
+			  "description": "Strategy for time step change: use drive caller"
+			},
+			"strategy-no-change": {
+			  "prefix": "no change",
+			  "body": [
+				  "no change;;"],
+			  "description": "Strategy for time step change: no change. WARNING: this disables termination of max iterations"
+		},
+		"Data block": {
+			"prefix": "begin: data;",
+			"body": [
+				"begin: data;",
+				"    problem: ${1|initial value,inverse dynamics|};",
+				"end: data;",
+				"$0"
+			],
+			"description": "Begin data, choice of problem type"
+		},
+		"Initial value block": {
+			"prefix": "begin: initial value;",
+			"body": [
+				"begin: initial value;",
+				"    initial time: ${1:0.};",
+				"    final time: $2;",
+				"    time step: $3;",
+				"",
+				"    max iterations: $4;",
+				"    tolerance: ${5:1.e-6};",
+				"",
+				"    derivatives coefficient: ${6:1.e-6};",
+				"    $0",
+				"end: initial value;"
+			],
+			"description": "Begin data with initial value problem"
+		},
+		"initial-time": {
+		  "prefix": "initial time:",
+		  "body": ["initial time: ${1:<time>};"],
+		  "description": "Simulation initial time"
+		},
+		"final-time": {
+		  "prefix": "final time:",
+		  "body": ["final time: ${1|forever,<time>|};"],
+		  "description": "Simulation final time"
+		},
+		"strategy": {
+		  "prefix": "strategy:",
+		  "body": ["strategy: ${1:<strategy_type>};"],
+		  "description": "Strategy for time step change"
+		},
+		"min-time-step": {
+		  "prefix": "min time step:",
+		  "body": ["min time step: ${1:<min_time_step>};"],
+		  "description": "Minimum allowed time step"
+		},
+		"max-time-step": {
+		  "prefix": "max time step:",
+		  "body": ["max time step: ${1|<max_time_step>,unlimited|};"],
+		  "description": "Maximum allowed time step"
+		},
+		"time-step": {
+		  "prefix": "time step:",
+		  "body": ["time step: ${1:<time_step>};"],
+		  "description": "Initial time step. If no change is asked, constant throughout simulation"
+		},
+		"modify-residual test": {
+		  "prefix": "modify residual test;",
+		  "body": ["modify residual test;"],
+		  "description": "Modify the residual test taking into account the rate of change of the status"
+		},
+		"tolerance": {
+		  "prefix": "tolerance",
+		  "body": [
+				"tolerance: ${1|null,<residual_tolerance>|},",
+				"  ${2:[test, {none | norm | minmax\\}] [, scale]}",
+				"  ${3:[, {null | <solution_tolerance>\\}]}",
+				"  ${4:[, test, {none | norm | minmax\\}];}"],
+		  "description": "Residual and (optional) solution tolerance"
+		},
+		"max iterations": {
+		  "prefix": "max iterations",
+		  "body": ["max iterations: ${1:<max_iterations>} ${2:[, at most]};"],
+		  "description": "Error out after <max_iterations> or continue after at most <max_iterations> if error is reduced"
+		},
+		"method": {
+		  "prefix": "method",
+		  "body": ["method: ${1:<method_data>};"],
+		  "description": "Selection of integration scheme"
+		},
+		"ms": {
+		  "prefix": "ms",
+		  "body": [
+			"ms,",
+			"${1:(DriveCaller)<differential_radius>},",
+			"${2:[(DriveCaller)<algebraic_radius>]};"],
+		  "description": "Multistep method."
+		},
+		"eigenanalysis": {
+		  "prefix": "eigenanalysis:",
+		  "body": [
+			"eigenanalysis:",
+			"  ${1|(real)<when>,list\\, (integer)<num_times>\\, (real)<when> [\\, ...]|}",
+			"  , ${2|output [full] matrices\\, , |}${3|output sparse matrices\\, , |}${4|output eigenvectors\\, , |}",
+			"  ${5|output geometry\\, , |}${6|matrix output precision\\, (int)<matrix_precision>\\, , |}",
+			"  ${7|results output precision\\, (int)<results_precision>\\, , |}${8|parameter\\, (real)<param>\\, , |}",
+			"  ${9|lower frequency limit\\, (real)<lower>\\, , |}${10|upper frequency limit\\, (real)<upper>\\, , |}",
+			"  ${11|use lapack [\\, balance\\, {no \\| scale \\| permute \\| all}],use arpack\\, (integer)<nev>\\, (integer)<ncv>\\, (real)<tol>,use jdqz\\, (integer)<nev>\\, (integer)<ncv>\\, (real)<tol>, |}",
+			"  ;"],
+		  "description": "Eigenanalysis"
+		},
+		"constlaw-linear-elastic": {
+			"prefix": "linear elastic",
+			"body": [
+	  			"linear elastic${1| isotropic, |}, ${2:(real)<stiffness>}"],
+			"description": "Linear elastic constitutive law"
+		  },
+		  "constlaw-linear-elastic-generic": {
+			"prefix": "linear elastic generic",
+			"body": [
+	  			"linear elastic generic, ${1:(DerivativeOfEntity)<stiffness>}"],
+			"description": "Linear elastic constitutive law. For N x 1 vectors, the expected stiffness is a N x N matrix"
+		  },
+		  "constlaw-linear-elastic-generic-axial-torsion-coupling": {
+			"prefix": "linear elastic generic axial torsion coupling",
+			"body": [
+				"linear elastic generic axial torsion coupling,",
+				"  ${1:(DerivativeOfEntity)<stiffness>},",
+				"  ${2:(real)<coupling_coefficient>}"],
+			"description": "Linear elastic 6D constitutive law, with torsion stiffness directly proportional to axial strain, through <coupling_coefficient>"
+		  },
+		  "contlaw-cubic-elastic-generic": {
+			"prefix": "cubic elastic generic",
+			"body": [
+				"cubic elastic generic,",
+				"  ${1:(Entity)<stiffness_1>},",
+				"  ${2:(Entity)<stiffness_2>},",
+				"  ${3:(Entity)<stiffness_3>}"],
+			"description": "Cubic elastic generic constitutive law. Only 1D or 3D"
+		  },
+		  "constlaw-inverse-square-elastic": {
+			"prefix": "inverse square elastic",
+			"body": [
+	  			"inverse square elastic, ${1:(real)<stiffness>}, ${2:(real)<ref_length>}"],
+			"description": "Inverse square elastic constitutive law. Only 1D. f = stiffness*(ref_length(1 + eps))^(-2)"
+		  },
+		  "constlaw-log-elastic": {
+			"prefix": "log elastic",
+			"body": [
+	  			"log elastic, ${1:(real)<stiffness>}"],
+			"description": "Log elastic constitutive law. Only 1D. f = stiffness*log(1 + eps)"
+		  },
+		  "constlaw-linear-elastic-bistop": {
+			"prefix": "linear elastic bistop",
+			"body": [
+				"linear elastic bistop,",
+				"  ${1:(DerivativeOfEntity)<stiffness>},",
+				"  ${2:[initial status, {inactive | active | (bool) <status>\\}],}",
+				"  ${3:(DriveCaller)<activating_condition>},",
+				"  ${4:(DriveCaller)<deactivating_condition>}"],
+			"description": "Linear elastic bistop consitutive law"
+		  },
+		  "constlaw-double-linear-elastic": {
+			"prefix": "double linear elastic",
+			"body": [
+				"double linear elastic,",
+				"  ${1:(real)<stiffness_1>},",
+				"  ${2:(real)<upper_strain>},",
+				"  ${3:(real)<lower_strain>},",
+				"  ${4:(real)<stiffness_2>}"],
+			"description": "Double linear elastic constitutive law. Only 1D or 3D"
+		  },
+		  "constlaw-isotropic-hardening-elastic": {
+			"prefix": "isotropic hardening elastic",
+			"body": [
+				"isotropic hardening elastic,",
+				"  ${1:(real)<stiffness>},",
+				"  ${2:(real)<reference_strain>},",
+				"  ${3:[, linear stiffness, (real)<linear_stiffness>]}"],
+			"description": "Isotropic hardening elastic constitutive law. Only 1D. f = stiffness*(beta + alpha|eps|^2)/(1 + alpha|eps|^2)eps; alpha = 3/|reference_strain|^2; beta = linear_stiffness/stiffness"
+		  },
+		  "constlaw-scalar-function-elastic": {
+			"prefix": "scalar function elastic",
+			"body": [
+				"scalar function elastic,",
+				"  ${1|(DifferentiableScalarFunction)<function>,null|}",
+				"  ${2:[, ...]}"],
+			"description": "Differentiable scalar function constitutive law."
+		  },
+		  "constlaw-scalar-function-elastic-orthotropic": {
+			"prefix": "scalar function elastic orthotropic",
+			"body": [
+				"scalar function elastic orthotropic,",
+				"  ${1|(DifferentiableScalarFunction)<function>,null|}",
+				"  ${2:[, ...]}"],
+			"description": "Differentiable scalar function orthotropic onstitutive law. 1D, 3D and 6D."
+		  },
+		  "constlaw-linear-viscous": {
+			"prefix": "linear viscous",
+			"body": [
+	  			"linear viscous, ${1:(real)<viscosity>}"],
+			"description": "Linear viscous constitutive law. 1D, 3D and 6D."
+		  },
+		  "constlaw-linear-viscous-isotropic": {
+			"prefix": "linear viscous isotropic",
+			"body": [
+	  			"linear viscous isotropic, ${1:(real)<viscosity>}"],
+			"description": "Linear viscous (isotropic) constitutive law. 1D, 3D and 6D."
+		  },
+		  "constlaw-linear-viscous-generic": {
+			"prefix": "linear viscous generic",
+			"body": [
+	  			"linear viscous generic, ${1:(DerivativeOfEntity)<viscosity>}"],
+			"description": "Linear viscous generic constitutive law. 1D, 3D and 6D. If force in N x 1, expected viscosity is a N x N matrix"
+		  },
+		  "constlaw-linear-viscoelastic": {
+			"prefix": "linear viscoelastic",
+			"body": [
+				"linear viscoelastic,",
+				"  ${1:(real)<stiffness>},",
+				"  ${2|(real)<viscosity>,proportional\\, (real)<factor>|}"],
+			"description": "Linear viscoelastic (isotropic) constitutive law. 1D, 3D and 6D."
+		  },
+		  "constlaw-linear-viscoelastic-isotropic": {
+			"prefix": "linear viscoelastic isotropic",
+			"body": [
+				"linear viscoelastic isotropic,",
+				"  ${1:(real)<stiffness>},",
+				"  ${2|(real)<viscosity>,proportional\\, (real)<factor>|}"],
+			"description": "Linear viscoelastic isotropic constitutive law. 1D, 3D and 6D. If proportional is given, then viscosity = factor*stiffness"
+		  },
+		  "constlaw-linear-viscoelastic-generic": {
+			"prefix": "linear viscoelastic generic",
+			"body": [
+				"linear viscoelastic generic,",
+				"  ${1:(DerivativeOfEntity)<stiffness>},",
+				"  ${2|(DerivativeOfEntity)<viscosity>,proportional\\, (real)<factor>|}"],
+			"description": "Linear viscoelastic isotropic constitutive law. 1D, 3D and 6D. If force in N x 1, expected stiffness and viscosity are N x N matrices. If proportional is given, then viscosity = factor*stiffness"
+		  },
+		  "constlaw-linear-time-variant-viscoelastic-generic": {
+			"prefix": "linear time variant viscoelastic generic",
+			"body": [
+				"linear time variant viscoelastic generic,",
+				"  ${1:(DerivativeOfEntity)<stiffness>},",
+				"  ${2:(DriveCaller)<stiffness_scale>},",
+				"  ${3|(DerivativeOfEntity)<viscosity>,proportional\\, (real)<factor>|},",
+				"  ${4:(DriveCaller)<viscosity_scale>}"],
+			"description": "Linear time variant viscoelastic isotropic constitutive law. 1D, 3D and 6D. If force in N x 1, expected stiffness and viscosity are N x N matrices. If proportional is given, then viscosity = factor*stiffness. f = stiffness*stiffness_scale(t)*eps + viscosity*viscosity_scale*dot_eps"
+		  },
+		  "constlaw-linear-viscoelastic-generic-axial-torsion-coupling": {
+			"prefix": "linear viscoelastic generic axial torsion coupling",
+			"body": [
+				"linear viscoelastic generic axial torsion coupling,",
+				"  ${1:(DerivativeOfEntity)<stiffness>},",
+				"  ${2|(DerivativeOfEntity)<viscosity>,proportional\\, (real)<factor>|},",
+				"  ${3:(real)<coupling_coefficient>}"],
+			"description": "Linear viscoelastic generic axial torsion coupling. Only 6D."
+		  },
+		  "constlaw-cubic-viscoelastic-generic": {
+			"prefix": "cubic viscoelastic generic",
+			"body": [
+				"cubic viscoelastic generic,",
+				"  ${1:(DerivativeOfEntity)<stiffness_1>},",
+				"  ${2:(DerivativeOfEntity)<stiffness_2>},",
+				"  ${3:(DerivativeOfEntity)<stiffness_3>},",
+				"  ${4:(DerivativeOfEntity)<viscosity>}"],
+			"description": "Cubic viscoelstic generic constitutive law. Only 1D and 3D. f = stiffness_1*eps + stiffness_2*|eps|*eps + stiffness_3*eps^3 + viscosity*dot_eps"
+		  },
+		  "costlaw-double-linear-viscoelastic": {
+			"prefix": "double linear viscoelastic",
+			"body": [
+				"double linear viscoelastic,",
+				"  ${1:(real)<stiffness_1>},",
+				"  ${2:(real)<upper_strain>},",
+				"  ${3:(real)<lower_strain>},",
+				"  ${4:(real)<stiffness_2>},",
+				"  ${5:(real)<viscosity>}",
+				"  ${6:[, second damping, (real)<viscosity_2>]}"],
+			"description": "Double linear viscoelastic constitutive law. Only 1D or 3D"
+		  },
+		  "constlaw-turbulent-viscoelastic": {
+			"prefix": "turbulent viscoelastic",
+			"body": [
+				"turbulent viscoelastic,",
+				"  ${1:(real)<stiffness>},",
+				"  ${2:(real)<parabolic_viscosity>}",
+				"  ${3:[, (real)<threshold>, [, (real)<linear_viscosity>] ]}"],
+			"description": "Turbulent viscoelastic constitutive law. Only 1D."
+		  },
+		  "constlaw-linear-viscoelastic-bistop": {
+			"prefix": "linear viscoelastic bistop",
+			"body": [
+				"linear viscoelastic bistop,",
+				"  ${1:(DerivativeOfEntity)<stiffness>},",
+				"  ${2:(DerivativeOfEntity)<viscosity>},",
+				"  ${3:[initial status, {inactive | active | (bool)<status>\\},]}",
+				"  ${4:(DriveCaller)<activating_condition>},",
+				"  ${5:(DriveCaller)<deactivating_condition>}"],
+			"description": "Linear viscoelastic bistop constitutive law. 1D, 3D and 6D."
+		  },
+		  "constlaw-shock-absorber": {
+			"prefix": "shock absorber",
+			"body": [
+				"shock absorber,",
+				"  ${1:[prestrain, (real)<prestrain>], }",
+				"  ${2:(real)<reference_pressure>},",
+				"  ${3:(real)<reference_area_for_force_computation>},",
+				"  ${4:(real)<interaction_coefficient>},",
+				"  ${5:(real)<polytropic_exponent>},",
+				"  ${6:[epsilon max, (real)<upper_strain_bound>, ]}",
+				"  ${7:[epsilon min, (real)<lower_strain_bound>, ]}",
+				"  ${8:[penalty, (real)<penalty_factor_for_strain>,",
+				"                (real)<penalty_factor_for_strain_rate>]}",
+				"  ${9:[metering, (DriveCaller)<metering_area>, ]}",
+				"    ${10:[negative, (DriveCaller)<metering_area_for_negative_strain_rate>, ]}",
+				"  ${11:[orifice, (DriveCaller)<orifice_area>, ]}",
+				"  ${12:(real)<fluid_area>},",
+				"  ${13:(real)<fluid_density>},",
+				"  ${14:(real)<drag_coefficient_/_reference_length>}",
+				"  ${15:[, friction, (real)<reference_epsilon_prime>,",
+				"                    (real)<friction_amplitude_coefficient>]}"],
+			"description": "Shock absorber constitutive law. Only 1D. Models an hydraulic shock absorber."
+		  },
+		  "constlaw-symbolic-elastic": {
+			"prefix": "symbolic elastic",
+			"body": [
+				"symbolic elastic,",
+				"  epsilon, \"${1:<epsilon>}\" ${2:[, ...]},",
+				"  expression, \"${3:<expression>}\" ${4:[, ...]}"],
+			"description": "Symbolic elastic consitutive law. 1D, 3D or 6D. Needs GiNaC support."
+		  },
+		  "constlaw-symbolic-viscous": {
+			"prefix": "symbolic viscous",
+			"body": [
+				"symbolic viscous,",
+				"  epsilon prime, \"${1:<epsilon_prime>}\" ${2:[, ...]},",
+				"  expression, \"${3:<expression>}\" ${4:[, ...]}"],
+			"description": "Symbolic viscous consitutive law. 1D, 3D or 6D. Needs GiNaC support."
+		  },
+		  "constlaw-symbolic-viscoelastic": {
+			"prefix": "symbolic viscoelastic",
+			"body": [
+				"symbolic viscoelastic,",
+				"  epsilon, \"${1:<epsilon>}\" ${2:[, ...]},",
+				"  epsilon prime, \"${3:<epsilon_prime>}\" ${4:[, ...]},",
+				"  expression, \"${5:<expression>}\" ${6:[, ...]}"],
+			"description": "Symbolic viscoelastic consitutive law. 1D, 3D or 6D. Needs GiNaC support"
+		  },
+		  "constlaw-ann-elastic": {
+			"prefix": "ann elastic",
+			"body": [
+				"ann elastic, \"${1:<file_name>}\""],
+			"description": "Artificial Neural Network elastic consitutive law. 1D, 3D or 6D"
+		  },
+		  "constlaw-ann-viscoelastic": {
+			"prefix": "ann viscoelastic",
+			"body": [
+				"ann viscoelastic, \"${1:<file_name>}\""],
+			"description": "Artificial Neural Network viscoelastic consitutive law. 1D, 3D or 6D"
+		  },
+		  "constlaw-nlsf-viscoelastic": {
+			"prefix": "nlsf viscoelastic",
+			"body": [
+				"nlsf viscoelastic,",
+				"  ${1:(DerivativeOfEntity)<kappa_0'>},",
+				"  ${2|null,(ScalarFunction)<diag_force'>|},",
+				"  ${3:[, ...]}",
+				"  ${4|(DerivativeOfEntity)<kappa_0''>,proportional\\, (real)<coef>|},",
+				"  ${5|null,(ScalarFunction)<diag_force''>|},",
+				"  ${6:[, ...]}"],
+			"description": "NLSF viscoelastic constitutive law. 1D, 3D or 6D."
+		  },
+		  "constlaw-nlsf-elastic": {
+			"prefix": "nlsf elastic",
+			"body": [
+				"nlsf elastic,",
+				"  ${1:(DerivativeOfEntity)<kappa_0'>},",
+				"  ${2|null,(ScalarFunction)<diag_force'>|},",
+				"  ${3:[, ...]}"],
+			"description": "NLSF elastic constitutive law. 1D, 3D or 6D."
+		  },
+		  "constlaw-nlsf-viscous": {
+			"prefix": "nlsf viscous",
+			"body": [
+				"nlsf viscous,",
+				"  ${1:(DerivativeOfEntity)<kappa_0''>},",
+				"  ${2|null,(ScalarFunction)<diag_force''>|},",
+				"  ${3:[, ...]}"],
+			"description": "NLSF viscous constitutive law. 1D, 3D or 6D."
+		  },
+		  "constlaw-nlp-viscoelastic": {
+			"prefix": "nlp viscoelastic",
+			"body": [
+				"nlp viscoelastic,",
+				"  ${1:(DerivativeOfEntity)<kappa_0'>},",
+				"  ${2|null,(ScalarFunction)<diag_stiffness>|},",
+				"  ${3:[, ...]}",
+				"  ${4|(DerivativeOfEntity)<kappa_0''>,proportional\\, (real)<coef>|},",
+				"  ${5|null,(ScalarFunction)<diag_damping>|},",
+				"  ${6:[, ...]}"],
+			"description": "NLP viscoelastic constitutive law. 1D, 3D or 6D."
+		  },
+		  "constlaw-nlp-elastic": {
+			"prefix": "nlp elastic",
+			"body": [
+				"nlsf elastic,",
+				"  ${1:(DerivativeOfEntity)<kappa_0'>},",
+				"  ${2|null,(ScalarFunction)<diag_stiffness>|},",
+				"  ${3:[, ...]}"],
+			"description": "NLP elastic constitutive law. 1D, 3D or 6D."
+		  },
+		  "constlaw-nlp-viscous": {
+			"prefix": "nlp viscous",
+			"body": [
+				"nlsf viscous,",
+				"  ${1:(DerivativeOfEntity)<kappa_0''>},",
+				"  ${2|null,(ScalarFunction)<diag_damping>|},",
+				"  ${3:[, ...]}"],
+			"description": "NLP viscous constitutive law. 1D, 3D or 6D."
+		  },
+		  "constlaw-array": {
+			"prefix": "array",
+			"body": [
+				"array,",
+				"  ${1:(integer)<number>},",
+				"    ${2:(ConstitutiveLaw)<wrapped_constitutive_law>}, ${3:[, ...]}"],
+			"description": "Linear combination of constitutive laws."
+		  },
+		  "constlaw-bistop": {
+			"prefix": "bistop",
+			"body": [
+				"bistop,",
+				"  ${1:[initial status, {inactive | active | (bool)<status>\\},]}",
+				"  ${3:(DriveCaller)<activating_condition>},",
+				"  ${4:(DriveCaller)<deactivating_condition>},",
+				"  ${5:(ConstitutiveLaw<<Entity>>,<<DerivativeOfEntity>>)<wrapped_constitutive_law>}"],
+			"description": "Activates of deactivates a constitutive property based on distincted conditions, with memory"
+		  },
+		  "constlaw-invariant-angular": {
+			"prefix": "invariant angular",
+			"body": [
+				"invariant angular,",
+				"  ${1:(real)<xi>}, ${2:(ConstitutiveLaw<3D>)<wrapped_constitutive_law>}"],
+			"description": "Wrapper for constitutive laws based used with \"attached\" version of deformable hinge. Only 3D"
+		  },
+		  "node-structural": {
+			"prefix": "structural:",
+			"body": [
+				"structural: ${1:<label>},",
+				"  ${2:<node_type>, <node_args>}",
+				"  ;"],
+			"description": "Structural node"
+		  },
+		  "node-structural-dynamic": {
+			"prefix": "dynamic",
+			"body": [
+				"dynamic,",
+				"  ${1:<absolute_position>},",
+				"  ${2:<absolute_orientation_matrix>},",
+				"  ${3:[orientation description, <orientation_description>],}",
+				"  ${4:<absolute_velocity>},",
+				"  ${5:<absolute_angular_velocity>}"],
+			"description": "Dynamic structural node"
+		  },
+		  "node-structural-static": {
+			"prefix": "static",
+			"body": [
+				"static,",
+				"${1:<absolute_position>},",
+				"${2:<absolute_orientation_matrix>},",
+				"${3:[orientation description, <orientation_description>],}",
+				"${4:<absolute_velocity>},",
+				"${5:<absolute_angular_velocity>};"],
+			"description": "Static (inertia-less) structural node"
+		  },
+		  "node-structural-static-displacement": {
+			"prefix": "static displacement",
+			"body": [
+				"static displacement,",
+				"${1:<absolute_position>},",
+				"${2:<absolute_velocity>};"],
+			"description": "Static displacement (massless point) structural node"
+		  },
+		  "node-structural-dynamic-displacement": {
+			"prefix": "dispdyn",
+			"body": [
+				"dynamic displacement,",
+				"${1:<absolute_position>},",
+				"${2:<absolute_velocity>};"],
+			"description": "Dynamic displacement (point mass) structural node"
+		  },
+		  "node-structural-modal": {
+			"prefix": "modal",
+			"body": [
+				"modal,",
+				"${3:<absolute_position>},",
+				"${4:<absolute_orientation_matrix>},",
+				"${6:<absolute_velocity>},",
+				"${7:<absolute_angular_velocity>};"],
+			"description": "Modal structural node"
+		  },
+		  "node-structural-dummy": {
+			"prefix": "dummy",
+			"body": [
+				"dummy, ${1:<base node label>}, ${2|offset,relative frame|}"],
+			"description": "Dummy structural node"
+		  },
+		  "node-structural-dummy-offset": {
+			"prefix": "offset",
+			"body": [
+				"offset,",
+				"  ${1:<relative_offset>},",
+				"  ${2:<relative_orientation_matrix>};"],
+			"description": "Dummy node (offset)"
+		  },
+		  "node-structural-dummy-relframe": {
+			"prefix": "relative frame",
+			"body": [
+				"relative frame,",
+				"    ${1:<reference_node_label>},",
+				"      position, ${2:<reference_offset>},",
+				"      orientation, ${3:<reference_orientation_matrix>},",
+				"      pivot node, ${4:<pivot_node_label>},",
+				"      position, ${5:<pivot_offset>},",
+				"      orientation, ${6:<pivot_orientation_matrix>};"],
+			"description": "Dummy node (relative frame)"
+		  },
+		  "node-structural-assembly": {
+			"prefix": "assembly",
+			"body": [
+				"assembly,",
+				"  ${1:<position_initial_stiffness>},",
+				"  ${2:<velocity_initial_stiffness>},",
+				"  ${3:<omega_rotates>}, ${4|yes,no|};"],
+			"description": "Assembly-related parameters of structural node"
+		  },
+		  "node-electic": {
+			"prefix": "electric",
+			"body": [
+				"electric: ${1:<label>},",
+				"  value, ${2:<initial_value>},",
+				"  derivative, ${3:<derivative_initial_value>};"],
+			"description": "Electric node"
+		  },
+		  "node-abstract": {
+			"prefix": "abstract",
+			"body": [
+				"abstract: ${1:<label>}, ${2|algebraic,differential|},",
+				"  value, ${3:<initial_value>},",
+				"  derivative, ${4:<derivative_initial_value>};"],
+			"description": "Abstract node"
+		  },
+		  "node-hydraulic": {
+			"prefix": "hydraulic",
+			"body": [
+				"hyraulic: ${1:<label>},",
+				"  value, ${2:<initial_value>};"],
+			"description": "Hydraulic node"
+		  },
+		  "node-parameter": {
+			"prefix": "parameter",
+			"body": [
+	  			"parameter: ${1:<label>}, value, ${2:<initial_value>,} ${3|element,sample and hold,beam strain gage|},"],
+			"description": "Parameter node (WARNING: parameter nodes are obsolete)"
+		  },
+		  "node-parameter-sampleandhold": {
+			"prefix": "sample and hold",
+			"body": [
+	  			"sample and hold, ${1:<signal>}, ${2:<sample_time>};"],
+			"description": "Parameter node (sample and hold)"
+		  },
+		  "node-parameter-beamstraingage": {
+			"prefix": "beam strain gage",
+			"body": [
+	  			"beam strain gage, ${1:<y>}, ${2:<z>};"],
+			"description": "Parameter node (beam strain gage)."
+		  },
+		  "node-output-global": {
+			"prefix": "output:",
+			"body": [
+	  			"output: ${1|structural,abstract,electric,hydraulic,parameter|};"],
+			"description": "Node output card"
+		  },
+		  "output-structural-nodes-global": {
+			"prefix": "structural,",
+			"body": [
+	  			"structural, ${1:[accelerations,]} ${2|<node_label>,range|}"],
+			"description": "Structural nodes output control"
+		  },
+		  "output-electric-nodes-global": {
+			"prefix": "electric,",
+			"body": [
+	  			"electric, ${1|<node_label>,range|}"],
+			"description": "Electric nodes output control"
+		  },
+		  "output-abstract-nodes-global": {
+			"prefix": "abstract,",
+			"body": [
+	  			"abstract, ${1|<node_label>,range|}"],
+			"description": "Abstract nodes output control"
+		  },
+		  "output-hydraulic-nodes-global": {
+			"prefix": "hydraulic,",
+			"body": [
+				"hydraulic, ${1|<node_label>,range|}"],
+			"description": "Hydraulic nodes output control"
+		  },
+		  "output-nodes-global-range": {
+			"prefix": "range",
+			"body": "range, ${1:<node_start_label>}, ${2:<node_end_label>}"
+		  },
+		  "file-driver": {
+			"prefix": "file:",
+			"body": [
+	  			"file: ${2|fixed step,variable step,socket,RTAI input,stream|}"],
+			"description": "File driver"
+		  },
+		  "fixed-step-driver": {
+			"prefix": "fixed step",
+			"body": [
+				"fixed step,",
+				"  ${1|count,<steps_number>|},",
+				"  ${2:<columns_number>},",
+				"  initial time, ${3|from file,<initial_time>|},",
+				"  time step, ${4|from file,<time_step>|},",
+				"  ${5:[interpolation, {linear | const\\}],}",
+				"  ${6:[pad zeroes, {yes | no\\} bailout, {none | upper | lower | any\\}],}",
+				"  \"${7:<file_name>}\";"],
+			"description": "Fixed step file driver"
+		  },
+		  "variable-step-driver": {
+			"prefix": "variable step",
+			"body": [
+				"variable step,",
+				"  ${1:<channels_number>},",
+				"  ${2:[interpolation, {linear | const\\}],}",
+				"  ${3:[pad zeroes, {yes | no\\} bailout, {none | upper | lower | any\\}],}",
+				"  \"${4:<file_name>}\";"],
+			"description": "Variable step file driver"
+		  },
+		  "socket-driver": {
+			"prefix": "socket",
+			"body": [
+				"socket,",
+				"  ${1:<columns_number>},",
+				"  ${2:[initial values, <value n°1>, ...],}",
+				"  ${3|local\\, \"<file_name\">,[port\\, <port_number>\\, ] (AuthenticationMethod) <authentication>|};"],
+			"description": "Socket file driver"
+		  },
+		  "RTAI-mailbox-driver": {
+			"prefix": "RTAI input",
+			"body": [
+				"RTAI input,",
+				"  stream driver name, \"${1:<stream_name>}\",",
+				"    ${2:[create, {yes | no\\}],}",
+				"    ${3:[host, \"<host_name>\"],}",
+				"    ${4:[{[non] blocking, [...]\\}],}",
+				"    ${5:<columns_number>};"],
+			"description": "RTAI mailbox driver"
+		  },
+		  "stream-driver": {
+			"prefix": "stream",
+			"body": [
+				"stream,",
+				"  name, ${1:\"<stream_name>\"},",
+				"  create, ${2|yes,no|},",
+				"  ${3:[{local, \"<path>\" | [port, <port_number>, ] [host, \"<host_name>\" , ]\\}],}",
+				"  ${4:[ { [no] signal | [non] blocking \\} , [...] ,]}",
+				"  ${5:[input every, <steps>,]}",
+				"  ${6:[receive first, {yes | no\\},]}",
+				"  ${7:[timeout, <timeout>],}",
+				"  ${8: [echo, \"<echo_file_name>\",]}",
+				"    ${9: [precision, <precision>,]}",
+				"    ${10: [shift, <shift>,]}",
+				"  ${11:<columns_number>}",
+				"  ${12:[, initial values, <value n°1>, ... ,]}",
+				"  ;"],
+			"description": "Stream driver"
+		  },
+		  "aerodynamic-body": {
+			"prefix": "aerodynamic-body:",
+			"body": [
+				"aerodynamic body: ${1:<label>},",
+				"${2:<node_label>},",
+				"${3:[ [user defined] induced velocity, <induced_velocity_label> [, passive] ,]}",
+				"${4:(Vec3)<relative_surface_offset>},",
+				"${5:(OrientationMatrix)<relative_surface_orientation>},",
+				"${6:(real)<surface_span>},",
+				"${7:(Shape<1D>)<surface_chord>},",
+				"${8:(Shape<1D>)<surface_aerodynamic_center>},",
+				"${9:(Shape<1D>)<surface_b_c_point>},",
+				"${10:(Shape<1D>)<surface_twist>},",
+				"${11:[tip loss, (Shape<1D>)<tip_loss>],}",
+				"${12:<integration_points>}",
+				"${13:[, control, (DriveCaller)<control_drive>]}",
+				"${14:[, {naca 0012 | rae 9671 | [theodorsen, ] c81, <c81_data> \\}]}",
+				"${15:[, unsteady, { bielawa \\}]}",
+				"${16:[, jacobian, {yes | no | <bool> \\}]}",
+				"${17:[, <custom_output>]}",
+				"${18:[{std | gauss | node \\}]}",
+				";"],
+			"description": "Aerodynamic body element"
+		  },
+		  "aerodynamic-beam2": {
+			"prefix": "aerodynamic-beam2:",
+			"body": [
+				"aerodynamic beam2: ${1:<label>},",
+				"${2:<beam2_label>},",
+				"${3:[ [user defined] induced velocity, <induced_velocity_label> [, passive] ,]}",
+				"${4:(Vec3)<relative_surface_offset_1>},",
+				"${5:(OrientationMatrix)<relative_surface_orientation_1>},",
+				"${6:(Vec3)<relative_surface_offset_2>},",
+				"${7:(OrientationMatrix)<relative_surface_orientation_2>},",
+				"${8:(Shape<1D>)<surface_chord>},",
+				"${9:(Shape<1D>)<surface_aerodynamic_center>},",
+				"${10:(Shape<1D>)<surface_b_c_point>},",
+				"${11:(Shape<1D>)<surface_twist>},",
+				"${12:[tip loss, (Shape<1D>)<tip_loss>],}",
+				"${13:<integration_points>}",
+				"${14:[, control, (DriveCaller)<control_drive>]}",
+				"${15:[, {naca 0012 | rae 9671 | [theodorsen, ] c81, <c81_data> \\}]}",
+				"${16:[, unsteady, { bielawa \\}]}",
+				"${17:[, jacobian, {yes | no | <bool> \\}]}",
+				"${18:[, <custom_output>]}",
+				"${19:[{std | gauss | node \\}]}",
+				";"],
+			"description": "Aerodynamic beam2 element"
+		  },
+		  "aerodynamic-beam3": {
+			"prefix": "aerodynamic-beam3:",
+			"body": [
+				"aerodynamic beam3: ${1:<label>},",
+				"${2:<beam3_label>},",
+				"${3:[ [user defined] induced velocity, <induced_velocity_label> [, passive] ,]}",
+				"${4:(Vec3)<relative_surface_offset_1>},",
+				"${5:(OrientationMatrix)<relative_surface_orientation_1>},",
+				"${6:(Vec3)<relative_surface_offset_2>},",
+				"${7:(OrientationMatrix)<relative_surface_orientation_2>},",
+				"${8:(Vec3)<relative_surface_offset_2>},",
+				"${9:(OrientationMatrix)<relative_surface_orientation_2>},",
+				"${10:(Shape<1D>)<surface_chord>},",
+				"${11:(Shape<1D>)<surface_aerodynamic_center>},",
+				"${12:(Shape<1D>)<surface_b_c_point>},",
+				"${13:(Shape<1D>)<surface_twist>},",
+				"${14:[tip loss, (Shape<1D>)<tip_loss>],}",
+				"${15:<integration_points>}",
+				"${16:[, control, (DriveCaller)<control_drive>]}",
+				"${17:[, {naca 0012 | rae 9671 | [theodorsen, ] c81, <c81_data> \\}]}",
+				"${18:[, unsteady, { bielawa \\}]}",
+				"${19:[, jacobian, {yes | no | <bool> \\}]}",
+				"${20:[, <custom_output>]}",
+				"${21:[{std | gauss | node \\}]}",
+				";"],
+			"description": "Aerodynamic beam3 element"
+		  },
+		  "aeromodal": {
+			"prefix": "aeromodal:",
+			"body": [
+				"aeromodal: ${1:<label>},",
+				"  ${2:<reference_modal_joint>},",
+				"  ${3:<(OrientationMatrix)<orientation>},",
+				"  ${4:<reference_chord>},",
+				"  ${5:<number_of_aerodynamic_states>},",
+				"  ${6:[rigid, ]}",
+				"  ${7:[gust, ]}",
+				"  ${8:\"<modal_matrices_file>\"};"],
+			"description": "Aeromodal element"
+		  },
+		  "aircraft-instruments": {
+			"prefix": "aircraft instruments:",
+			"body": [
+				"aircraft instruments: ${1:<label>},",
+				"  ${2:<aircraft_node>}",
+				"  ${3:[, orientation, {flight mechanics | aeroelasticity | (OrientationMatrix) <relative_orientation_matrix>\\}]};"],
+			"description": "Aircraft instruments element"
+		  },
+		  "air-properties": {
+			"prefix": "air properties:",
+			"body": [
+				"air properties: ${1:<label>},",
+				"${2|(DriveCaller) <air_density>\\, (real) <sound_celerity>,std|},",
+				"${3:(TplDriveCaller<Vec3>)<air_speed>},",
+				"${4:[, gust, <gust_model> [, ...]]};"],
+			"description": "Air properties"
+		  },
+		  "air-properties-sub": {
+			"prefix": "std",
+			"body": ["std, ${1|{ SI \\| British } [ \\, temperature deviation \\, <delta_T> ],  <p0> \\, (DriveCaller) <rho0> \\, <T0> \\, <dT/dz> \\, <R> \\, <g0> \\, <z1> \\, <z2>|} [ , reference altitude , <z0> ]"],
+			"description": "sub snippet air properties"
+		  },
+		  "generic-aerodynamic-force": {
+			"prefix": "generic aerodynamic force:",
+			"body": [
+				"generic aerodynamic force: ${1:<label>},",
+				"  ${2:[position, (Vec3)<relative_position>, ]}",
+				"  ${3:[orientation, (OrientationMatrix)<relative_orientation>, ]}",
+				"  ${4:[reference surface, (real)<reference_surface>, ]}",
+				"  ${5:[reference length, (real)<reference_length>, ]}",
+				"  ${6:[alpha first, { no | yes \\}, ]}",
+				"  ${7|file\\, <data_file_specification>,reference\\, <gaf_data_label>|};"],
+			"description": "Generic aerodynamic force (WARNING: Does not contribute to Jacobian!)"
+		  },
+		  "induced-velocity": {
+			"prefix": "induced velocity:",
+			"body": [
+				"induced velocity: ${1:<label>},",
+				"  ${2:<induced_velocity_type>, <induced_velocity_data>}",
+				"  ;"],
+			"description": "Induced velocity element."
+		  },
+		  "automatic-structural": {
+			"prefix": "automatic structural:",
+			"body": [
+				"automatic structural: ${1:<label>},",
+				"  ${2:(Vec3)<momentum>},",
+				"  ${3:(Vec3)<momenta_moment>},",
+				"  ${4:(Vec3)<momentum_derivative>},",
+				"  ${5:(Vec3)<momenta_moment_derivative>};"],
+			"description": "Automatic structural element. Used to improve convergence in derivatives phase. WARNING: <momenta_moment> and <momenta_moment_derivative> make sense only for 6DOF structural nodes"
+		  },
+		  "beam3": {
+			"prefix": "beam3:",
+			"body": [
+				"beam3: ${1:<label>},",
+				"  ${2:<node_1_label>},",
+				"    position, ${3:(Vec3)<relative_offset_1>},",
+				"    orientation, ${4:(OrientationMatrix)<relative_orientation_1>},",
+				"  ${5:<node_2_label>},",
+				"    position, ${6:(Vec3)<relative_offset_2>},",
+				"    orientation, ${7:(OrientationMatrix)<relative_orientation_2>},",
+				"  ${8:<node_3_label>},",
+				"    position, ${9:(Vec3)<relative_offset_3>},",
+				"    orientation, ${10:(OrientationMatrix)<relative_orientation_3>},",
+				"  ${11|(OrientationMatrix)<orientation_matrix_section_I>,from nodes|},",
+				"  ${12:(ConstitutiveLaw<6D>)<constitutive_law_section_I>},",
+				"  ${13|same,(OrientationMatrix)<orientation_matrix_section_II>,from nodes|},",
+				"  ${14|same,(ConstitutiveLaw<6D>)<constitutive_law_section_II>|},",
+				"  ${15:[, piezoelectric actuator, [...] ]}",
+				"  ${16:[, custom_output]};"],
+			"description": "beam3 element"
+		  },
+		  "beam2": {
+			"prefix": "beam2:",
+			"body": [
+				"beam2: ${1:<label>},",
+				"  ${2:<node_1_label>},",
+				"    position, ${3:(Vec3)<relative_offset_1>},",
+				"    orientation, ${4:(OrientationMatrix)<relative_orientation_1>},",
+				"  ${5:<node_2_label>},",
+				"    position, ${6:(Vec3)<relative_offset_2>},",
+				"    orientation, ${7:(OrientationMatrix)<relative_orientation_2>},",
+				"  ${8|(OrientationMatrix)<orientation_matrix_section_I>,from nodes|},",
+				"  ${9:(ConstitutiveLaw<6D>)<constitutive_law_section_I>},",
+				"  ${10:[, piezoelectric actuator, [...] ]}",
+				"  ${11:[, custom_output]};"],
+			"description": "beam2 element"
+		  },
+		  "body-element": {
+			"prefix": "body:",
+			"body": [
+				"body: ${1:<label>}, ${2:<node_label>}",
+				"  ${3|<one_body>,<one_pointmass>,variable mass\\, <one_vm_body>,condense\\, <num_masses>\\, { <one_body \\| <one_pointmass> }\\, [\\, ...]|}"],
+			"description": "Body element"
+		  },
+		  "bulk-element": {
+			"prefix": "bulk:",
+			"body": [
+				"bulk: ${1:<label>},",
+				"  stiffness spring,",
+				"    ${2:(NodeDof)<dof>},",
+				"    ${3:(DriveCaller)<stiffness_drive>};"],
+			"description": "Bulk element"
+		  },
+		  "electric-element": {
+			"prefix": "electric:",
+			"body": [
+				"electric: ${1:<label>},",
+				"  ${2:<electric_type>, <electric_arglist>}",
+	  			"  ;"],
+			"description": "Electric element"
+		  },
+		  "force-element": {
+			"prefix": "force:",
+			"body": [
+				"force: ${1:<label>},",
+				"    ${2:<force_type>, <force_arglist>}",
+				"    ;"],
+			"description": "Force element"
+		  },
+		  "couple-element": {
+			"prefix": "couple:",
+			"body": [
+				"couple: ${1:<label>},",
+				"    ${2:<couple_type>, <couple_arglist>}",
+				"    ;"],
+			"description": "Couple element."
+		  },
+		  "genel-element": {
+			"prefix": "genel:",
+			"body": [
+				"genel: ${1:<label>},",
+				"    ${2:<genel_type>, <genel_arglist>}",
+				"    ;"],
+			"description": "GENEL element."
+		  },
+		  "gravity": {
+			"prefix": "gravity",
+			"body": [
+				"gravity: ${1|uniform,central\\,|}, ${2|<direction>,<absolute_origin>|}, ${3|<magnitude>,<central_gravity_field_mass>|};"
+			],
+			"description": "Define a gravity field"
+		},
+		  "hydraulic-element": {
+			"prefix": "hydraulic:",
+			"body": [
+				"hydraulic: ${1:<label>},",
+				"  ${2:<hydraulic_element_type>, <hydraulic_element_data>}",
+				"  ;"],
+			"description": "Hydraulic element"
+		  },
+		  "joint-regulatization-element": {
+			"prefix": "joint regularization:",
+			"body": [
+				"joint regularization: ${1:<joint_label>}, tikhonov, ${2:(real)<coef>};"],
+			"description": "Joint regularization element. Used to modify algebraic constraints in order to improve ill-conditioned problems."
+		  },
+		  "joint-element": {
+			"prefix": "joint:",
+			"body": [
+				"joint: ${1:<label>},",
+				"  ${2:<joint_type>, <joint_arglist>}",
+				"  ;"],
+			"description": "Joint element."
+		  },
+		  "stream-output": {
+			"prefix": "stream output:",
+			"body": [
+				"stream output: ${1:<label>},",
+				"  stream name, \"${2:<stream_name>}\",",
+				"  create, ${3|yes,no|},",
+				"  ${4:[{local, \"<socket_name>\", | [port, <port_number>, ] host, \"<host_name>\", \\}]}",
+				"  ${5:[{ [no] signal | [non] blocking | [no] send first | [do not] abort if broken\\}] [, ...] ,}",
+				"  ${6:[output every, <steps>, ]}",
+				"  ${7:[echo, <file_name> [, precision, <precision>] [, shift, <shift>] ,]}",
+				"  ${8:<content>};"],
+			"description": "Stream output element"
+		  },
+		  "gust-model-front-1D": {
+			"prefix": "front 1D",
+			"body": [
+				"front 1D,",
+				"  ${1:(Vec3), <front_direction>},",
+				"  ${2:(Vec3), <perturbation_directio>},",
+				"  ${3:(real), <front_velocity>},",
+				"  ${4:(DriveCaller), <front_profile>}"],
+			"description": "Front 1D gust model"
+		  },
+		  "gust-model-scalar-function": {
+			"prefix": "scalar function",
+			"body": [
+				"scalar function,",
+				"  reference position, ${1:(Vec3)<X0>},",
+				"  reference orientation, ${2:(OrientationMatrix)<R0>},",
+				"  ${3:(ScalarFunction), <sf>}"],
+			"description": "Scalar function gust model"
+		  },
+		  "gust-model-power-law": {
+			"prefix": "power law",
+			"body": [
+				"power law,",
+				"  reference position, ${1:(Vec3)<X0>},",
+				"  reference orientation, ${2:(OrientationMatrix)<R0>},",
+				"  reference elevation, ${3:(real)<z_ref>},",
+				"  reference velocity, ${4:(DriveCaller)<v_ref>},",
+				"  exponend, ${5:(real)<exponent>};"],
+			"description": "Power law wind profile gust model"
+		  },
+		  "body-one-body": {
+			"prefix": "one_body",
+			"body": [
+				"${1:(real)<mass>},",
+				"  ${2:(Vec3)<relative_center_of_mass>},",
+				"${3:(Mat3x3)<inertia_matrix>}",
+				"  ${4:[, inertial, {node | (OrientationMatrix)<orientation_matrix>\\} ]};"],
+			"description": "One body (rigid, constant mass)."
+		  },
+		  "body-one-pointmass": {
+			"prefix": "one_pointmass",
+			"body": ["${1:(real)<mass>};"],
+			"description": "One pointmass (rigid body, constant mass). WARNING: the node has to be a displacement node."
+		  },
+		  "body-one-vm-body": {
+			"prefix": "one_vm_body",
+			"body": [
+				"${1:(DriveCaller)<mass>},",
+				"${2:(TplDriveCaller<Vec3>)<relative_center_of_mass>},",
+				"${3:(TplDriveCaller<Mat3x3>)<variable_mass_inertia_matrix>},",
+				"${4:(TplDriveCaller<Mat3x3>)<variable_geometry_inertia_matrix>};"],
+			"description": "One body (rigid body, variable mass)."
+		  },
+		  "data-file-specification": {
+			"prefix": "file",
+			"body": [
+				"file,",
+				"  ${1:[{ angle units, { radians | degrees \\} | scale angles, (real)<scale_angle_factor> \\}, ]}",
+				"  ${2:[scale lengths, (real)<length_scale_factor> , ]}",
+				"  \"${3:<data_file_name>}\""],
+			"description": "Data file specification for generic aerodynamic force"
+		  },
+		  "rotor": {
+			"prefix": "rotor",
+			"body": [
+				"rotor,",
+				"  ${1:<craft_node>},",
+				"  ${2:[orientation, (OrientationMatrix)<rotor_orientation>, ]}",
+				"  ${3:<rotor_node>},",
+				"  induced velocity, ${4|no,uniform,glauert [\\, type\\, <glauert_type>],mangler,dynamic inflow|},",
+				"  ${5:(real)<reference_omega>}, ${6:(real)<reference_radius>}",
+				"  ${7:[, <option>, [, ...] ]}"],
+			"description": "Induced velocity element. Type: rotor (helicopter)."
+		  },
+		  "inflow-dynamic-inflow": {
+			"prefix": "dynamic inflow",
+			"body": [
+				"dynamic inflow,",
+				"  ${1:(real)<reference_omega>},",
+				"  ${2:(real)<reference_radius>},",
+				"  ${3:[, option, [, ...]]}"],
+			"description": "Dynamic inflow induced velocity model"
+		  },
+		  "inflow-option-ground": {
+			"prefix": "ground",
+			"body": ["ground, ${1:<ground_node>}"],
+			"description": "Ground node in inflow model: informs the rotor about ground proximity"
+		  },
+		  "inflow-option-delay": {
+			"prefix": "delay",
+			"body": ["delay, ${1:(DriveCaller)<memory_factor>}"],
+			"description": "Memory factor in inflow model. Together with hover_correction_factor and ff_correction_factor are used to correct nominal induced velocity"
+		  },
+		  "inflow-option-max-iterations": {
+			"prefix": "max iterations",
+			"body": ["max iterations, ${1:(integer)<max_iterations>}"],
+			"description": "Max iterations to compute nominal induced velocity"
+		  },
+		  "inflow-option-eta": {
+			"prefix": "eta",
+			"body": ["eta, ${1:(real)<eta>}"],
+			"description": "Fraction of the difference between two iterations of the nominal induced velocity actually used in computation. Defaults to 1."
+		  },
+		  "inflow-option-tolerance": {
+			"prefix": "tolerance",
+			"body": ["tolerance, ${1:(real)<tolerance>}"],
+			"description": "Tolerance factor in inflow model"
+		  },
+		  "inflow-option-correction": {
+			"prefix": "correction",
+			"body": ["correction, ${1:(real)<hover_correction_factor>}, ${2:(real)<ff_correction_factor>}"],
+			"description": "Hover and forward flight correction factors. Together with memory_factor are used to correct nominal induced velocity."
+		  },
+		  "inflow-option-initial-value": {
+			"prefix": "initial value",
+			"body": ["initial value, ${1:(real)<const_vel>}, ${2:(real)<cosine_vel>}, ${3:(real)<sine_vel>}"],
+			"description": "Initialization of dynamic inflow induced velocity model"
+		  },
+		  "electric-accelerometer": {
+			"prefix": "accelerometer",
+			"body": [
+				"accelerometer,",
+				"  ${1:<struct_node_label>},",
+				"  ${2:<abstract_node_label>},",
+				"  ${3:(Vec3)<measure_direction>},",
+				"  ${4:(real)<omega>},",
+				"  ${5:(real)<tau>},",
+				"  ${6:(real)<csi>},",
+				"  ${7:(real)<kappa>}"],
+			"description": "Accelerometer electric element. NOTE: A legacy version, with built-in transfer function, is available. See section 8.7 of input manual."
+		  },
+		  "electric-displacement": {
+			"prefix": "displacement",
+			"body": [
+				"displacement,",
+				"  ${1:<struct_node_1_label>}, ${2:(Vec3)<relative_offset_1>},",
+				"  ${3:<struct_node_2_label>}, ${4:(Vec3)<relative_offset_2>},",
+				"  ${5:<abstract_node_label>}"],
+			"description": "Electric displacement element"
+		  },
+		  "electric-motor": {
+			"prefix": "motor",
+			"body": [
+				"motor,",
+				"  ${1:<struct_node_1_label>},",
+				"  ${2:<struct_node_2_label>},",
+				"  ${3:(Vec3)<direction_relative_to_node_1>},",
+				"  ${4:<abstract_node_1_label},",
+				"  ${5:<abstract_node_2_label},",
+				"  ${6:(real)<dG>},",
+				"  ${7:(real)<dL>},",
+				"  ${8:(real)<dR>}"],
+			"description": "Electric motor element"
+		  },
+		  "electric-discete-control": {
+			"prefix": "discrete control",
+			"body": [
+				"discrete control,",
+				"  ${1:(integer)<num_outputs>}, ${2:(integer)<num_inputs>},",
+				"  ${3:(integer)<order_A>} ${4:[, fir, (integer)<order_B>]},",
+				"  ${5:(integer)<num_iter>},",
+				"  ${6:<control_data>},",
+				"  outputs,",
+				"    ${7:(ScalarValue)<output_value>}",
+				"      ${8:[, scale, (DriveCaller)<scale>]}",
+				"    ${9:[, ...]}",
+				"  inputs,",
+				"    ${10:(NodeDof)<input_dof>}",
+				"    ${11:[, ...]}",
+				"    ;"],
+			"description": "Discrete control electric element."
+		  },
+		  "force-abstract": {
+			"prefix": "abstract",
+			"body": [
+				"abstract,",
+				"  ${1:(NodeDof)<dof>},",
+				"  ${2:(DriveCaller)<force_magnitude>}"],
+			"description": "Abstract force element. No order required since force applies directly to the equation of the node."
+		  },
+		  "force-abstract-internal": {
+			"prefix": "abstract internal",
+			"body": [
+				"abstract internal,",
+				"  ${1:(NodeDof)<dof_1>},",
+				"  ${2:(NodeDof)<dof_2>},",
+				"  ${3:(DriveCaller)<force_magnitude>}"],
+			"description": "Abstract internal force element.No order required since force applies directly to the equation of the nodes, with opposite magnitude."
+		  },
+		  "force-absolute": {
+			"prefix": "absolute",
+			"body": [
+				"absolute,",
+				"  ${1:<node_label>},",
+				"    position, ${2:(Vec3)<relative_arm>},",
+				"    ${3:(TplDriveCaller<Vec3>)<force_value>}"],
+			"description": "Absolute force element"
+		  },
+		  "force-absolute-internal": {
+			"prefix": "absolute internal",
+			"body": [
+				"absolute internal,",
+				"  ${1:<node_1_label>},",
+				"    position, ${2:(Vec3)<relative_arm_1>},",
+				"  ${3:<node_2_label>},",
+				"    position, ${4:(Vec3)<relative_arm_2>},",
+				"    ${5:(TplDriveCaller<Vec3>)<force_value>}"],
+			"description": "Absolute internal force element"
+		  },
+		  "force-follower": {
+			"prefix": "follower",
+			"body": [
+				"follower,",
+				"  ${1:<node_label>},",
+				"    position, ${2:(Vec3)<relative_arm>},",
+				"    ${3:(TplDriveCaller<Vec3>)<force_value>}"],
+			"description": "Follower force element"
+		  },
+		  "force-follower-internal": {
+			"prefix": "follower internal",
+			"body": [
+				"follower internal,",
+				"  ${1:<node_1_label>},",
+				"    position, ${2:(Vec3)<relative_arm_1>},",
+				"  ${3:<node_2_label>},",
+				"    position, ${4:(Vec3)<relative_arm_2>},",
+				"    ${5:(TplDriveCaller<Vec3>)<force_value>}"],
+			"description": "Follower internal force element"
+		  },
+		  "force-total": {
+			"prefix": "total",
+			"body": [
+				"total,",
+				"  ${1:<node_label>}",
+				"    ${2:[, position, (Vec3)<relative_arm> ]}",
+				"    ${3:[, force orientation, (OrientationMatrix)<force_orientation>]}",
+				"    ${4:[, moment orientation, (OrientationMatrix)<moment_orientation>]}",
+				"  ${5:[, force, (TplDriveCaller<Vec3>)<force_value>]}",
+				"  ${6:[, moment, (TplDriveCaller<Vec3>)<moment_value>]}"],
+			"description": "Total force element"
+		  },
+		  "force-total-internal": {
+			"prefix": "total internal",
+			"body": [
+				"total internal,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[, position, (Vec3)<relative_arm_1>]}",
+				"    ${3:[, force orientation, (OrientationMatrix)<force_orientation_1>]}",
+				"    ${4:[, moment orientation, (OrientationMatrix)<moment_orientation_1>]}",
+				"  ${5:<node_2_label>},",
+				"    ${6:[, position, (Vec3)<relative_arm_2>]}",
+				"    ${7:[, force orientation, (OrientationMatrix)<force_orientation_2>]}",
+				"    ${8:[, moment orientation, (OrientationMatrix)<moment_orientation_2>]}",
+				"  ${9:[, force, (TplDriveCaller<Vec3>)<force_value>]}",
+				"  ${10:[, moment, (TplDriveCaller<Vec3>)<moment_value>]}"],
+			"description": "Total internal force element"
+		  },
+		  "force-modal": {
+			"prefix": "modal",
+			"body": [
+				"modal,",
+				"  ${1:<modal_label>},",
+				"    ${2:[list, (integer)<number_of_modes>, <mode1>, [, ...], ]}",
+				"  ${3:(DriveCaller<force1>)}",
+				"    ${4:[, resultant, (Vec3)<f>, (Vec3)<m>]}",
+				"  ${5:[, ...]}"],
+			"description": "Modal force element"
+		  },
+		  "force-external-structural": {
+			"prefix": "external structural",
+			"body": [
+				"external structural,",
+				"  ${1:<external_force_communicator>},",
+				"    ${2:[ reference node, <ref_node_label>], }",
+				"    ${3:[ { labels, {yes | no\\}\n              | sorted, {yes | no\\}\n              | orientation,\n                {none | orientation matrix | orientation vector | euler 123 \\}\n              | accelerations, {yes | no\\}\n              | use reference node forces, {yes | no\\}\n              [, rotate reference node forces, {yes | no\\}]\n        \\}\n        [, ...] ,\n      ]}",
+				"    ${4:(integer)<num_nodes>},",
+				"      ${5:<node_label>} ${6:[, offset, (Vec3)<offset>]}",
+				"      ${7:[, ...]}",
+				"      ${8:[, echo, \"<echo_file_name>\"]}"],
+			"description": "External structural force element"
+		  },
+		  "force-external-structural-mapping": {
+			"prefix": "external structural mapping",
+			"body": [
+				"external structural mapping,",
+				"  ${1:<external_force_communicator>},",
+				"    ${2:[ reference node, <ref_node_label>], }",
+				"    ${3:[ { labels, {yes | no\\}\n              | sorted, {yes | no\\}\n              | orientation,\n                {none | orientation matrix | orientation vector | euler 123 \\}\n              | accelerations, {yes | no\\}\n              | use reference node forces, {yes | no\\}\n              [, rotate reference node forces, {yes | no\\}]\n          \\}\n        [, ...] ,\n      ]}",
+				"    ${4:(integer)<num_points>},",
+				"      ${5:<node_label>}, offset ${6:[, <point_label>], (Vec3)<offset>}",
+				"        ${7:[, ...]}",
+				"      ${8:[, echo, \"<echo_file_name>\"\n        ${9:[, { precision, (integer)<digits>\n                 | , surface, \"<surface_file_name>\"\n                 | , output, \"<output_file_name>\"\n                 | , order, <order>\n                 | , basenode, <basenode>\n                 | , weight, {inf | (real)<weight> \\}\n             \\}\n          [, ...]\n        ]}\n          [, stop]\n      ]}",
+				"    ${10:[, mapped points number, {from file | (integer)<mapped_points>\\}\n      { full | sparse \\} mapping file, \"<mapping_file_name>\"\n          [, threshold, <threshold>]\n        [, {mapped labels file, \"<mapped_labels_file_name>\"]\n          | <mapped_label>, [, ...] \\}\n          ]}"],
+			"description": "External structural mapping force element"
+		  },
+		  "force-external-modal": {
+			"prefix": "external modal",
+			"body": [
+				"external modal,",
+				"  ${1:<modal_label>}",
+				"    ${2:[, accelerations]}",
+				"    ${3:[, type, {rigid | modal | all }]}"],
+			"description": "External modal force element"
+		  },
+		  "force-external-modal-mapping": {
+			"prefix": "external modal mapping",
+			"body": [
+				"external modal mapping,",
+				"  ${1:<external_force_communicator>},",
+				"    ${2:[reference node, <ref_node_label>], }",
+				"    ${3:[use rigid body forces, {yes | no\\},\n          [rotate rigid body forces, {yes | no\\} ,] ]}",
+				"    ${4:[accelerations, {yes | no\\} ,]}",
+				"    ${5:[type, {rigid | modal | all \\} , ]}",
+				"    nodes number, ${6:(integer)<num_nodes>},",
+				"      ${7:<node_1_label>}, ${8:[, ...]},",
+				"    modes number, ${9|from file,<num_modes>|},",
+				"    ${10|full,sparse|} mapping file, \"${11:<mapping_file_name>}\"",
+				"      ${12:[, threshold, <threshold>]}"],
+			"description": "External modal mapping force element"
+		  },
+		  "couple-absolute": {
+			"prefix": "absolute",
+			"body": [
+				"absolute,",
+				"  ${1:<node_label>},",
+				"  ${2:[position, (Vec3)<relative_arm>, ]}",
+				"  ${3:[(TplDriveCaller<Vec3>)<couple_value>, ]}"],
+			"description": "Absolute couple element"
+		  },
+		  "couple-absolute-internal": {
+			"prefix": "absolute internal",
+			"body": [
+				"absolute internal,",
+				"  ${1:<node_1_label>},",
+				"  ${2:[position, (Vec3)<relative_arm_1>, ]}",
+				"  ${3:<node_2_label>},",
+				"  ${4:[position, (Vec3)<relative_arm_2>, ]}",
+				"  ${5:(TplDriveCaller<Vec3>)<couple_value>}"],
+			"description": "Absolute internal couple element"
+		  },
+		  "couple-follower": {
+			"prefix": "follower",
+			"body": [
+				"follower,",
+				"  ${1:<node_label>},",
+				"  ${2:[position, (Vec3)<relative_arm>, ]}",
+				"  ${3:(TplDriveCaller<Vec3>)<couple_value>}"],
+			"description": "Follower couple element"
+		  },
+		  "couple-follower-internal": {
+			"prefix": "follower internal",
+			"body": [
+				"follower internal,",
+				"  ${1:<node_1_label>},",
+				"  ${2:[position, (Vec3)<relative_arm_1>, ]}",
+				"  ${3:<node_2_label>},",
+				"  ${4:[position, (Vec3)<relative_arm_2>, ]}",
+				"  ${5:(TplDriveCaller<Vec3>)<couple_value>}"],
+			"description": "Follower internal couple element"
+		  },
+		  "electric-discete-control-control": {
+			"prefix": "control",
+			"body": [
+				"control, \"${1:<control_matrices_file>}\","],
+			"description": "Control data for discrete control element"
+		  },
+		  "electric-discete-control-identification": {
+			"prefix": "identification",
+			"body": [
+				"identification,",
+				"  ${1|arx,armax|}",
+				"  ${2:[, forgettingfactor,\n    {\n        const, (real)<d>\n        |dynamic, (real)<n1>, (real)<n2>, (real)<rho>, (real)<fact>, (real)<kref>, (real)<klim>\n    \\}]}",
+				"  ${3:[, excitation, (DriveCaller)<excitation_drive> [, ...]]}",
+				"  ${4:[, file, \"<output_file_name>\"]},"],
+			"description": "Identification data for discrete control element"
+		  },
+		  "electric-discete-control-adaptive": {
+			"prefix": "adaptive control",
+			"body": [
+				"adaptive control,",
+				"  ${1:[{arx | armax \\} , ]}",
+				"  ${2:[periodic, <periodic_factor>, ]}",
+				"  ${3|gpc\\, <gpc_args>,deadbeat <deadbeat_args>|}",
+				"  ${4:[, forgettingfactor,\n    {\n        const, (real)<d>\n        |dynamic, (real)<n1>, (real)<n2>, (real)<rho>, (real)<fact>, (real)<kref>, (real)<klim>\n    \\}]}",
+				"  ${5:[, excitation, (DriveCaller)<excitation_drive> [, ...]]}",
+				"  ${6:[, trigger, (DriveCaller)<trigger_drive>]}",
+				"  ${7:[, desired output, (DriveCaller)<output_drive>, [, ...]]}",
+				"  ${8:[, file, \"<file_name>\"]},"],
+			"description": "Adaptative discrete control"
+		  },
+		  "electric-discete-control-adaptive-gpc": {
+			"prefix": "gpc",
+			"body": [
+				"gpc,",
+				"  ${1:(integer)<periodic_advancing_horizon>},",
+				"  ${2:(integer)<control_advancing_horizon>},",
+				"  ${3:[prediction weights, (real)<Wi>, [, ...], ]}",
+				"  ${4:[control weights, (real)<Ri>, [, ...], ]}",
+				"  ${5:(DriveCaller)<weight_drive>}"],
+			"description": "GPC Adaptive discrete control"
+		  },
+		  "electric-discete-control-adaptive-deadbeat": {
+			"prefix": "deadbeat",
+			"body": [
+				"deadbeat,",
+				"  ${1:(integer)<periodic_advancing_horizon>},",
+				"  ${2:(integer)<control_advancing_horizon>}"],
+			"description": "Deadbeat Adaptive discrete control"
+		  },
+		  "genel-clamp": {
+			"prefix": "clamp",
+			"body": [
+				"clamp,",
+				"  ${1:(NodeDof)<clamped_node>},",
+				"  ${2:(DriveCaller)<imposed_value>}"],
+			"description": "GENEL clamp element"
+		  },
+		  "genel-distance": {
+			"prefix": "distance",
+			"body": [
+				"distance,",
+				"  ${1:(NodeDof)<node_1_dof>},",
+				"  ${2:(NodeDof)<node_2_dof>},",
+				"  ${3:(DriveCaller)<imposed_distance>}"],
+			"description": "GENEL distance element"
+		  },
+		  "genel-spring": {
+			"prefix": "spring",
+			"body": [
+				"spring,",
+				"  ${1:(NodeDof)<node_1_dof>},",
+				"  ${2:(NodeDof)<node_2_dof>},",
+				"  ${3:(ConstitutiveLaw<1D>)<const_law>}"],
+			"description": "GENEL spring element. The constitutive law must be elastic."
+		  },
+		  "genel-spring-support": {
+			"prefix": "spring support",
+			"body": [
+				"spring support,",
+				"  ${1:(NodeDof)<node>},",
+				"  ${2:(ConstitutiveLaw<1D>)<const_law>}"],
+			"description": "GENEL spring support element. Must use algebraic value of differential node. Constlaw can be arbitrary."
+		  },
+		  "genel-cross-spring-support": {
+			"prefix": "cross spring support",
+			"body": [
+				"cross spring support,",
+				"  ${1:(NodeDof)<row_node>},",
+				"  ${2:(NodeDof)<col_node>},",
+				"  ${3:(ConstitutiveLaw<1D>)<const_law>}"],
+			"description": "GENEL cross spring support element. Writes a term depending on <col_node> degree of freedom on <row_node> equation. Must use algebraic value of differential node. Constlaw can be arbitrary."
+		  },
+		  "genel-mass": {
+			"prefix": "mass",
+			"body": [
+				"mass,",
+				"  ${1:(NodeDof)<node>},",
+				"  ${2:(DriveCaller)<mass>}"],
+			"description": "GENEL mass element. Must use algebraic value of differential node."
+		  },
+		  "genel-scalar-filter": {
+			"prefix": "scalar filter",
+			"body": [
+				"scalar filter,",
+				"  ${1:(NodeDof)<output_node>},",
+				"  ${2|[node dof\\,] (NodeDof)<input_node>,drive\\, (DriveCaller)<input_value>|},",
+				"  ${3:[canonical form, {controllable | observable\\}, ]}",
+				"  ${4:(integer)<output_order>} ${5:[, <output_coef_list>]},",
+				"  ${6:(integer)<input_order>} ${7:[, <input_coef_list>]}",
+				"  ${8:[, gain, (real)<gain>]}",
+				"  ${9:[, balance, {yes | no\\}]}"],
+			"description": "GENEL scalar filtr element."
+		  },
+		  "genel-state-space-SISO": {
+			"prefix": "state space SISO",
+			"body": [
+				"state space SISO,",
+				"  ${1:(NodeDof)<output_node>},",
+				"  ${2|[node dof\\,] (NodeDof)<input_node>,drive\\, (DriveCaller)<input_value>|},",
+				"  ${3:(integer)<state_order>}",
+				"  ${4:[, matrix E, <matrix_E_coef_list>]},",
+				"  matrix A, ${5:<matrix_A_coef_list>},",
+				"  matrix B, ${6:<matrix_B_coef_list>},",
+				"  matrix C, ${7:<matrix_C_coef_list>}",
+				"  ${8:[, matrix D, <D_coef>]}",
+				"  ${9:[, gain, <gain>]}",
+				"  ${10:[, balance, {yes | no\\}]}",
+				"  ${11:[, value, <x0_list>]}",
+				"    ${12:[, derivative, <x0p_list>]}"],
+			"description": "GENEL state space SISO element."
+		  },
+		  "genel-state-space-MIMO": {
+			"prefix": "state space MIMO",
+			"body": [
+				"state space MIMO,",
+				"  ${1:(integer)<num_outputs>}, ${2:(NodeDof)<output_node_list>},",
+				"  ${3:(integer)<num_inputs>},",
+				"    ${4|[node dof\\,] (NodeDof)<input_node>,drive\\, (DriveCaller)<input_value>|}",
+				"          ${5:[\\, ...]},",
+				"  ${6:(integer)<state_order>}",
+				"  ${7:[, matrix E, <matrix_E_coef_list>]},",
+				"  matrix A, ${8:<matrix_A_coef_list>},",
+				"  matrix B, ${9:<matrix_B_coef_list>},",
+				"  matrix C, ${10:<matrix_C_coef_list>}",
+				"  ${11:[, matrix D, <matrix_D_coef_list>]}",
+				"  ${12:[, gain, <gain>]}",
+				"  ${13:[, balance, {yes | no\\}]}",
+				"  ${14:[, value, <x0_list>]}",
+				"    ${15:[, derivative, <x0p_list>]}"],
+			"description": "GENEL state space MIMO element."
+		  },
+		  "genel-swashplate": {
+			"prefix": "swashplate",
+			"body": [
+				"swashplate,",
+				"  ${1:<collective_abstract_node>}",
+				"    ${2:[, limits, (real)<min_collective>, (real)<max_collective>]},",
+				"      ${3:<fore/aft_abstract_node>}",
+				"    ${4:[, limits, (real)<min_fore/aft>, (real)<max_fore/aft>]},",
+				"      ${5:<lateral_abstract_node>}",
+				"    ${6:[, limits, (real)<min_lateral>, (real)<max_lateral>]},",
+				"    ${7:<actuator_1_abstract_node_label>},",
+				"    ${8:<actuator_2_abstract_node_label>},",
+				"    ${9:<actuator_3_abstract_node_label>}",
+				"    ${10:[, (real)<dynamic_coef>, (real)<cyclic_factor>, (real)<collective_factor>]}"],
+			"description": "GENEL (rotorcraft) swashplate element"
+		  },
+		  "genel-rotor-trim-rotor": {
+			"prefix": "rotor trim, rotor",
+			"body": [
+				"rotor trim,",
+				"  rotor,",
+				"    ${1:<rotor_label>},",
+				"    ${2:<trust_node_label>},",
+				"    ${3:<longitudinal_moment_node_label>},",
+				"    ${4:<lateral_moment_node_label>},",
+				"    ${5:(DriveCaller)<desired_thrust_coefficient>},",
+				"    ${6:(DriveCaller)<desired_longitudinal_moment_coefficient>},",
+				"    ${7:(DriveCaller)<desired_lateral_moment_coefficient>},",
+				"    ${8:(real)<rotor_lock_number>},",
+				"    ${9:(real)<rotor_nondimensional_flap_frequency>},",
+				"    ${10:(real)<thrust_time_constant>}, ${11:(real)<moments_time_constant>},",
+				"    ${12:(real)<thrust_gain>}, ${13:(real)<moments_gain>}",
+				"    ${14:[, trigger (DriveCaller)<trigger>]}"],
+			"description": "GENEL (rotorcraft) rotor trim (rotor) element."
+		  },
+		  "genel-rotor-trim-generic": {
+			"prefix": "rotor trim, generic",
+			"body": [
+				"rotor trim,",
+				"  generic,",
+				"    ${1:[ reference node, <ref_node_label>, ]}",
+				"    ${2:(DriveCaller)<thrust>},",
+				"    ${3:(DriveCaller)<longitudinal_moment>},",
+				"    ${4:(DriveCaller)<lateral_moment>},",
+				"    ${5:(real)<rotor_radius>},",
+				"    ${6:(DriveCaller)<angular_velocity>},",
+				"    ${7:(DriveCaller)<advance_ratio>},",
+				"    ${8:<trust_node_label>},",
+				"    ${9:<longitudinal_moment_node_label>},",
+				"    ${10:<lateral_moment_node_label>},",
+				"    ${11:(DriveCaller)<desired_thrust_coefficient>},",
+				"    ${12:(DriveCaller)<desired_longitudinal_moment_coefficient>},",
+				"    ${13:(DriveCaller)<desired_lateral_moment_coefficient>},",
+				"    ${14:(real)<rotor_lock_number>},",
+				"    ${15:(real)<rotor_nondimensional_flap_frequency>},",
+				"    ${16:(real)<thrust_time_constant>}, ${17:(real)<moments_time_constant>},",
+				"    ${18:(real)<thrust_gain>}, ${19:(real)<moments_gain>}",
+				"    ${20:[, trigger (DriveCaller)<trigger>]}"],
+			"description": "GENEL (rotorcraft) rotor trim (generic) element."
+		  }
+		},
+		".source.mbdyn.element.gravity": {
+		  "gravity-uniform": {
+			"prefix": "uniform",
+			"body": ["uniform, (TplDriveCaller<Vec3>)<gravity_acceleration>"],
+			"description": "Gravity element (uniform field)"
+		  },
+		  "gravity-central": {
+			"prefix": "central",
+			"body": [
+				"central,",
+				"  ${1:[origin, (Vec3)<absolute_origin>]}",
+				"  mass, ${2:(real)<central_gravity_field_mass>},",
+				"  G, ${3|si,(real)<universal_gravity_constant>|}"],
+			"description": "Gravity element (central gravity field)"
+		  },
+		  "hydraulic-actuator": {
+			"prefix": "actuator",
+			"body": [
+				"actuator,",
+				"  ${1:<hydraulic_node_1_label>}, ${2:<hydraulic_node_2_label>},",
+				"  ${3:<structural_node_1_label>}, ${4:(Vec3)<offset_1>},",
+				"  ${5:<structural_node_2_label>}, ${6:(Vec3)<offset_2>},",
+				"  ${7:[ direction, (Vec3)<direction>,]}",
+				"  ${8:(real)<area_1>},",
+				"  ${9:(real)<area_2>},",
+				"  ${10:(real)<cylinder_length>},",
+				"  fluid, ${11:(HydraulicFluid)<fluid_1>},",
+				"  ${12|same,fluid\\, (HydraulicFluid)<fluid_2>|}"],
+			"description": "Hydraulic actuator element"
+		  },
+		  "hydraulic-minor-loss": {
+			"prefix": "minor loss",
+			"body": [
+				"minor loss,",
+				"  ${1:<hydraulic_node_1_label>}, ${2:<hydraulic_node_2_label>},",
+				"  ${3:(real)<k12>}, ${4:(real)<k21>}, ${5:(real)<area>}",
+				"  fluid, ${6:(HydraulicFluid)<fluid>}"],
+			"description": "Hydraulic minor loss element. Turbulent flow is assumed."
+		  },
+		  "hydraulic-three-way-minor-loss": {
+			"prefix": "three way minor loss",
+			"body": [
+				"three way minor loss,",
+				"  ${1:<hydraulic_node_1_label>},",
+				"  ${2:<hydraulic_node_2_label>},",
+				"  ${3:<hydraulic_node_3_label>},",
+				"  ${4:(real)<k12>}, ${5:(real)<k31>},",
+				"  ${6:(real)<area_12>}, ${7:(real)<area_31>},",
+				"  fluid, ${8:(HydraulicFluid)<fluid>}"],
+			"description": "Hydraulic three way minor loss element. Turbulent flow is assumed."
+		  },
+		  "hydraulic-control-valve": {
+			"prefix": "control valve",
+			"body": [
+				"control valve,",
+				"  ${1:<hydraulic_node_1_label>},",
+				"  ${2:<hydraulic_node_2_label>},",
+				"  ${3:<hydraulic_node_3_label>},",
+				"  ${4:<hydraulic_node_4_label>},",
+				"  ${5:(real)<area>},",
+				"  ${6:[loss, (real)<loss_factor>,]}",
+				"  ${7:(DriveCaller)<state>},",
+				"  ${8:fluid, (HydraulicFluid)<fluid>}"],
+			"description": "Hydraulic control valve element."
+		  },
+		  "hydraulic-dynamic-control-valve": {
+			"prefix": "dynamic control valve",
+			"body": [
+				"dynamic control valve,",
+				"  ${1:<hydraulic_node_1_label>},",
+				"  ${2:<hydraulic_node_2_label>},",
+				"  ${3:<hydraulic_node_3_label>},",
+				"  ${4:<hydraulic_node_4_label>},",
+				"  ${5:(DriveCaller)<force>},",
+				"  ${6:(real)<initial_displacement>},",
+				"  ${7:(real)<max_displacement>},",
+				"  ${8:(real)<duct_width>},",
+				"  ${9:[loss, (real)<loss_factor>,]}",
+				"  ${10:(real)<valve_diameter>},",
+				"  ${11:(real)<valve_density>},",
+				"  ${12:(real)<displacement_penalty>},",
+				"  ${13:(real)<velocity_penalty>},",
+				"  ${14:(real)<acceleration_penalty>},",
+				"  ${15:fluid, (HydraulicFluid)<fluid>}"],
+			"description": "Hydraulic dynamic control valve element."
+		  },
+		  "hydraulic-pressure-flow-control-valve": {
+			"prefix": "pressure flow control valve",
+			"body": [
+				"pressure flow control valve,",
+				"  ${1:<hydraulic_node_1_label>},",
+				"  ${2:<hydraulic_node_2_label>},",
+				"  ${3:<hydraulic_node_3_label>},",
+				"  ${4:<hydraulic_node_4_label>},",
+				"  ${5:<hydraulic_node_5_label>},",
+				"  ${6:<hydraulic_node_6_label>},",
+				"  ${7:(DriveCaller)<force>},",
+				"  ${8:(real)<initial_displacement>},",
+				"  ${9:(real)<max_displacement>},",
+				"  ${10:(real)<duct_width>},",
+				"  ${11:[loss, (real)<loss_factor>,]}",
+				"  ${12:(real)<valve_diameter>},",
+				"  ${13:(real)<valve_density>},",
+				"  ${14:(real)<displacement_penalty>},",
+				"  ${15:(real)<velocity_penalty>},",
+				"  ${16:(real)<acceleration_penalty>},",
+				"  ${17:fluid, (HydraulicFluid)<fluid>}"],
+			"description": "Hydraulic pressure flow control valve element."
+		  },
+		  "hydraulic-pressure-valve": {
+			"prefix": "pressure valve",
+			"body": [
+				"pressure valve,",
+				"  ${1:<hydraulic_node_1_label>},",
+				"  ${2:<hydraulic_node_2_label>},",
+				"  ${3:(real)<area>},",
+				"  ${4:(real)<mass>},",
+				"  ${5:(real)<max_area>},",
+				"  ${6:(real)<spring_stiffness>},",
+				"  ${7:(real)<spring_preload>},",
+				"  ${8:(real)<width>},",
+				"  ${9:(real)<displacement_penalty>},",
+				"  ${10:(real)<velocity_penalty>},",
+				"  ${11:(real)<acceleration_penalty>},",
+				"  ${12:fluid, (HydraulicFluid)<fluid>}"],
+			"description": "Hydraulic pressure valve element"
+		  },
+		  "hydraulic-flow-valve": {
+			"prefix": "flow valve",
+			"body": [
+				"flow valve,",
+				"  ${1:<hydraulic_node_1_label>},",
+				"  ${2:<hydraulic_node_2_label>},",
+				"  ${3:<hydraulic_node_3_label>},",
+				"  ${4:(real)<area>},",
+				"  ${5:(real)<mass>},",
+				"  ${6:(real)<max_area>},",
+				"  ${7:(real)<spring_stiffness>},",
+				"  ${8:(real)<spring_preload>},",
+				"  ${9:(real)<width>},",
+				"  ${10:(real)<displacement_penalty>},",
+				"  ${11:(real)<velocity_penalty>},",
+				"  ${12:(real)<acceleration_penalty>},",
+				"  ${13:fluid, (HydraulicFluid)<fluid>}"],
+			"description": "Hydraulic flow valve element."
+		  },
+		  "hydraulic-orifice": {
+			"prefix": "orifice",
+			"body": [
+				"orifice,",
+				"  ${1:<hydraulic_node_1_label>},",
+				"  ${2:<hydraulic_node_2_label>},",
+				"  ${3:(real)<orifice_area>},",
+				"  ${4:[ area, (real)<pipe_area>,]}",
+				"  ${5:[ reynolds, (real)<critical_reynolds_number>,]}",
+				"  ${6:fluid, (HydraulicFluid)<fluid>}"],
+			"description": "Hydraulic orifice element."
+		  },
+		  "hydraulic-pipe": {
+			"prefix": "pipe",
+			"body": [
+				"pipe,",
+				"  ${1:<hydraulic_node_1_label>},",
+				"  ${2:<hydraulic_node_2_label>},",
+				"  ${3:(real)<hydraulic_diameter>},",
+				"  ${4:[ area, (real)<pipe_area>,]}",
+				"  ${5:(real)<length>}",
+				"  ${6:[turbolent, ]}",
+				"  ${7:[initial value, (real)<flow>, ]}",
+				"  ${8:fluid, (HydraulicFluid)<fluid>}"],
+			"description": "Hydraulic pipe element."
+		  },
+		  "hydraulic-dynamic-pipe": {
+			"prefix": "dynamic pipe",
+			"body": [
+				"dynamic pipe,",
+				"  ${1:<hydraulic_node_1_label>},",
+				"  ${2:<hydraulic_node_2_label>},",
+				"  ${3:(real)<hydraulic_diameter>},",
+				"  ${4:[ area, (real)<pipe_area>,]}",
+				"  ${5:(real)<length>},",
+				"  ${6:[turbolent, ]}",
+				"  ${7:[initial value, (real)<flow>, ]}",
+				"  ${8:fluid, (HydraulicFluid)<fluid>}"],
+			"description": "Hydraulic dynamic pipe element."
+		  },
+		  "hydraulic-fluid-incompressible": {
+			"prefix": "incompressible",
+			"body": [
+				"incompressible,",
+				"  density, ${1:(real)<density>},",
+				"  viscosity, ${2:(real)<viscosity>},",
+				"  pressure, ${3:(real)<pressure>},",
+				"  temperature, ${4:(real)<temperature>}"],
+			"description": "Hydraulic fluid: incompressible"
+		  },
+		  "hydraulic-fluid-linearly-compressible": {
+			"prefix": "linearly compressible",
+			"body": [
+				"linear compressible,",
+				"  density, ${1:(real)<reference_density>},",
+				"  ${2|sound celerity\\, (real)<sound_celerity>,(real)<beta>|},",
+				"  ${3:(real)<reference_pressure>},",
+				"  viscosity, ${4:(real)<viscosity>},",
+				"  temperature, ${5:(real)<temperature>}"],
+			"description": "Hydraulic fluid: linearly compressible"
+		  },
+		  "hydraulic-fluid-linearly-compressible-thermal": {
+			"prefix": "linear thermal compressible",
+			"body": [
+				"linear thermal compressible,",
+				"  density, ${1:(real)<reference_density>},",
+				"    ${2|sound celerity\\, (real)<sound_celerity>,(real)<beta>|},",
+				"    ${3:(real)<reference_pressure>},",
+				"    ${4:(real)<alpha>}, ${5:(real)<reference_temperature>},",
+				"    viscosity, ${6:(real)<viscosity>}"],
+			"description": "Hydraulic fluid: linearly compressible, with termal dependency"
+		  },
+		  "hydraulic-fluid-super": {
+			"prefix": "super",
+			"body": [
+				"super,",
+				"  density, ${1:(real)<reference_density>},",
+				"    ${2|sound celerity\\, (real)<sound_celerity>,(real)<beta>|},",
+				"    ${3:(real)<reference_pressure>},",
+				"    viscosity, ${4:(real)<viscosity>},",
+				"    temperature, ${5:(real)<temperature>}"],
+			"description": "Hydraulic fluid: super (linearly compressible, with thermal dependency)"
+		  },
+		  "hydraulic-fluid-exponential": {
+			"prefix": "exponential",
+			"body": [
+				"exponential,",
+				"  density, ${1:(real)<reference_density>},",
+				"    ${2|sound celerity\\, (real)<sound_celerity>,(real)<beta>|},",
+				"    ${3:(real)<reference_pressure>},",
+				"    viscosity, ${4:(real)<viscosity>},",
+				"    temperature, ${5:(real)<temperature>},",
+				"    ${6:(real)<saturation_pressure>}"],
+			"description": "Hydraulic fluid: exponential (loosely inspired by AMESim's simply corrected compressible fluid)"
+		  },
+		  "joint-angular-acceleration": {
+			"prefix": "angular acceleration",
+			"body": [
+				"angular acceleration,",
+				"  ${1:<node_label>},",
+				"    ${2:(Vec3)<relative_direction>},",
+				"    ${3:(DriveCaller)<acceleration>}"],
+			"description": "Angular acceleration joint element"
+		  },
+		  "joint-angular-velocity": {
+			"prefix": "angular velocity",
+			"body": [
+				"angular velocity,",
+				"  ${1:<node_label>},",
+				"    ${2:(Vec3)<relative_direction>},",
+				"    ${3:(DriveCaller)<velocity>}"],
+			"description": "Angular velocity joint element"
+		  },
+		  "joint-axial-rotation": {
+			"prefix": "axial rotation",
+			"body": [
+				"axial rotation,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>},",
+				"    ${3:[orientation, (OrientationMatrix)<relative_orientation_matrix_1>, ]}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset_2>},",
+				"    ${6:[orientation, (OrientationMatrix)<relative_orientation_matrix_2>, ]}",
+				"  ${7:(DriveCaller)<angular_velocity>}"],
+			"description": "Axial rotation joint element. Node 1 and 2 rotate about relative axis 3 with imposed angular velocity angular_velocity."
+		  },
+		  "joint-brake": {
+			"prefix": "brake",
+			"body": [
+				"brake,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>}",
+				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix_1>]}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset_2>}",
+				"    ${6:[, orientation, (OrientationMatrix)<relative_orientation_matrix_2>]}",
+				"  friction, ${7:(real)<average_radius>},",
+				"    ${8:[preload, (real)<const_value>, ]}",
+				"    ${9:<friction_model>},",
+				"    ${10:<shape_function>},",
+				"    ${11:(DriveCaller)<normal_force>}"],
+			"description": "Brake joint element. WARNING: a revolute hinge must be present between Node 1 and 2."
+		  },
+		  "joint-cardano-hinge": {
+			"prefix": "cardano hinge",
+			"body": [
+				"cardano hinge,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>}",
+				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix_1>]}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset_2>}",
+				"    ${6:[, orientation, (OrientationMatrix)<relative_orientation_matrix_2>]}"],
+			"description": "Cardano hinge joint element."
+		  },
+		  "joint-cardano-pin": {
+			"prefix": "cardano pin",
+			"body": [
+				"cardano pin,",
+				"  ${1:<node_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset>}",
+				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix>]}"],
+			"description": "Cardano pin joint element. Equivalent to a Cardano hinge joint when Node 2 is grounded."
+		  },
+		  "joint-cardano-rotation": {
+			"prefix": "cardano rotation",
+			"body": [
+				"cardano rotation,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[, orientation, (OrientationMatrix)<relative_orientation_matrix_1>]}",
+				"  ${3:<node_2_label>},",
+				"    ${4:[, orientation, (OrientationMatrix)<relative_orientation_matrix_2>]}"],
+			"description": "Cardano rotation joint element. Equivalent to Cardano hinge, but without position constraints applied."
+		  },
+		  "joint-clamp": {
+			"prefix": "clamp",
+			"body": [
+				"clamp,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ]} ${3|node,(Vec3)<relative_offset>|},",
+				"    ${4:[orientation, ]} ${5|node,(OrientationMatrix)<relative_orientation_matrix>|},"],
+			"description": "Clamp joint element"
+		  },
+		  "joint-deformable-axial-joint": {
+			"prefix": "deformable axial joint",
+			"body": [
+				"deformable axial joint,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>}",
+				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix_1>]}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset_2>}",
+				"    ${6:[, orientation, (OrientationMatrix)<relative_orientation_matrix_2>]}",
+				"  ${7:(ConstitutiveLaw<1D>)<const_law>}"],
+			"description": "Deformable axial joint element. Relative rotation about axis 3 is used as strain in the constitutive law."
+		  },
+		  "joint-deformable-displacement-joint": {
+			"prefix": "deformable displacement joint",
+			"body": [
+				"deformable displacement joint,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>}",
+				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix_1>]}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset_2>}",
+				"    ${6:[, orientation, (OrientationMatrix)<relative_orientation_matrix_2>]}",
+				"  ${7:(ConstitutiveLaw<3D>)<const_law>}"],
+			"description": "Deformable displacement joint element. Relative position and velocity (w.r.t. Node 1) are used as strain and strain derivative in constitutive law."
+		  },
+		  "joint-deformable-hinge": {
+			"prefix": "deformable hinge",
+			"body": [
+				"deformable hinge,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>}",
+				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix_1>]}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset_2>}",
+				"    ${6:[, orientation, (OrientationMatrix)<relative_orientation_matrix_2>]}",
+				"  ${7:(ConstitutiveLaw<3D>)<const_law>}",
+				"  ${8:[, orientation description,\n    {\n        euler123\n        |euler313\n        |euler321\n        |orientation vector\n        |orientation matrix\n    \\}]}"],
+			"description": "Deformable hinge joint element. Relative orientation and angular velocity (w.r.t. Node 1) are used as strain and strain derivative in consitutive law."
+		  },
+		  "joint-deformable-joint": {
+			"prefix": "deformable joint",
+			"body": [
+				"deformable joint,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>}",
+				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix_1>]}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset_2>}",
+				"    ${6:[, orientation, (OrientationMatrix)<relative_orientation_matrix_2>]}",
+				"  ${7:(ConstitutiveLaw<6D>)<const_law>}",
+				"  ${8:[, orientation description,\n    {\n        euler123\n        |euler313\n        |euler321\n        |orientation vector\n        |orientation matrix\n    \\}]}"],
+			"description": "Deformable joint element. Combination of deformable hinge and deformable displacement, with cross terms in (6D) constitutive law."
+		  },
+		  "joint-distance": {
+			"prefix": "distance",
+			"body": [
+				"distance,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, (Vec3)<relative_offset_1>,]}",
+				"  ${3:<node_2_label>},",
+				"    ${4:[position, (Vec3)<relative_offset_2>,]}",
+				"  ${5|(DriveCaller)<distance>,from nodes|}"],
+			"description": "Distance joint element."
+		  },
+		  "joint-drive-displacement": {
+			"prefix": "drive displacement",
+			"body": [
+				"drive displacement,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>},",
+				"  ${3:<node_2_label>},",
+				"    ${4:[position, ] (Vec3)<relative_offset_2>},",
+				"  ${5:(DriveCaller<Vec3>)<relative_position>}"],
+			"description": "Drive displacement joint element. WARNING: Superseded by the total joint element."
+		  },
+		  "joint-drive-displacement-pin": {
+			"prefix": "drive displacement pin",
+			"body": [
+				"drive displacement pin,",
+				"  ${1:<node_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset>},",
+				"  ${3:(DriveCaller<Vec3>)<relative_position>}"],
+			"description": "Drive displacement pin joint element. WARNING: Superseded by the total pin joint element."
+		  },
+		  "joint-drive-hinge": {
+			"prefix": "drive hinge",
+			"body": [
+				"drive hinge,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[orientation, ] (OrientationMatrix)<relative_orientation_matrix_1>},",
+				"  ${3:<node_2_label>},",
+				"    ${4:[orientation, ] (OrientationMatrix)<relative_orientation_matrix_2>},",
+				"  ${5:(DriveCaller<Vec3>)<relative_orientation_vector>}"],
+			"description": "Drive hinge joint element. WARNING: Superseded by the total joint element."
+		  },
+		  "joint-gimbal-rotation": {
+			"prefix": "gimbal rotation",
+			"body": [
+				"gimbal rotation,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[, orientation, (OrientationMatrix)<relative_orientation_matrix_1>]}",
+				"  ${3:<node_2_label>},",
+				"    ${4:[, orientation, (OrientationMatrix)<relative_orientation_matrix_2>]}",
+				"  ${5:[, orientation description,\n    {\n        euler123\n        |euler313\n        |euler321\n        |orientation vector\n        |orientation matrix\n    \\}]}"],
+			"description": "Gimbal rotation joint element. Does not impose position constraints."
+		  },
+		  "joint-imposed-displacement": {
+			"prefix": "imposed displacement",
+			"body": [
+				"imposed displacement,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>},",
+				"  ${3:<node_2_label>},",
+				"    ${4:[position, ] (Vec3)<relative_offset_2>},",
+				"  ${5:(Vec3)<direction>},",
+				"  ${6:(DriveCaller<Vec3>)<relative_position>}"],
+			"description": "Imposed displacement joint element. WARNING: Superseded by the total joint element."
+		  },
+		  "joint-imposed-displacement-pin": {
+			"prefix": "imposed displacement pin",
+			"body": [
+				"imposed displacement pin,",
+				"  ${1:<node_label>},",
+				"    ${2:[position, ] (Vec3)<node_offset>},",
+				"  ${3:(Vec3)<offset>},",
+				"  ${4:(Vec3)<direction>},",
+				"  ${5:(DriveCaller<Vec3>)<position>}"],
+			"description": "Imposed displacement pin joint element. WARNING: Superseded by the total pin joint element."
+		  },
+		  "joint-in-line": {
+			"prefix": "in line",
+			"body": [
+				"in line,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_line_position>},",
+				"    ${3:[orientation, (OrientationMatrix)<relative_orientation>]}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset>}"],
+			"description": "In line joint element."
+		  },
+		  "joint-in-plane": {
+			"prefix": "in plane",
+			"body": [
+				"in plane,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_plane_position>},",
+				"    ${3:(Vec3)<relative_normal_direction>}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset>}"],
+			"description": "In plane joint element."
+		  },
+		  "joint-invariant-deformable-hinge": {
+			"prefix": "invariant deformable hinge",
+			"body": [
+				"invariant deformable hinge,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>}",
+				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix_1>]}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset_2>}",
+				"    ${6:[, orientation, (OrientationMatrix)<relative_orientation_matrix_2>]}",
+				"  ${7:(ConstitutiveLaw<3D>)<const_law>}",
+				"  ${8:[, orientation description,\n    {\n        euler123\n        |euler313\n        |euler321\n        |orientation vector\n        |orientation matrix\n    \\}]}"],
+			"description": "Invariant deformable hinge joint element. EXPERIMENTAL. The constitutive law is referred to an orientation that is intermediate between those of the nodes."
+		  },
+		  "joint-linear-acceleration": {
+			"prefix": "linear acceleration",
+			"body": [
+				"linear acceleration,",
+				"  ${1:<node_label>},",
+				"    ${2:(Vec3)<relative_direction>},",
+				"    ${3:(DriveCaller<Vec3>)<acceleration>}"],
+			"description": "Linear acceleration joint element. Imposes absolute linear acceleration at node."
+		  },
+		  "joint-linear-velocity": {
+			"prefix": "linear velocity",
+			"body": [
+				"linear velocity,",
+				"  ${1:<node_label>},",
+				"    ${2:(Vec3)<relative_direction>},",
+				"    ${3:(DriveCaller<Vec3>)<velocity>}"],
+			"description": "Linear valocity joint element. Imposes absolute linear velocity at node."
+		  },
+		  "joint-prismatic": {
+			"prefix": "prismatic",
+			"body": [
+				"prismatic,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[orientation, ] (OrientationMatrix)<relative_orientation_matrix_1>},",
+				"  ${3:<node_2_label>},",
+				"    ${4:[orientation, ] (OrientationMatrix)<relative_orientation_matrix_2>},"],
+			"description": "Prismatic joint element."
+		  },
+		  "joint-revolute-hinge": {
+			"prefix": "revolute hinge",
+			"body": [
+				"revolute hinge,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>}",
+				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix_1>]}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset_2>}",
+				"    ${6:[, orientation, (OrientationMatrix)<relative_orientation_matrix_2>]}",
+				"  ${7:[, initial theta, (real)<initial_theta>]}",
+				"  ${8:[, friction, (real)<average_radius>,",
+				"    ${9:[, preload, (real)<const_value>]}",
+				"    ${10:<friction_model>},",
+				"    ${11:<shape_function>}",
+				"    ]}"],
+			"description": "Revolute hinge joint."
+		  },
+		  "joint-revolute-pin": {
+			"prefix": "revolute pin",
+			"body": [
+				"revolute pin,",
+				"  ${1:<node_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset>}",
+				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix>]}",
+				"  ${4:[, initial theta, (real)<initial_theta>]}"],
+			"description": "Revolute pin joint. Equivalent to a revolute hinge joint when one node is grounded."
+		  },
+		  "joint-revolute-rotation": {
+			"prefix": "revolute rotation",
+			"body": [
+				"revolute rotation,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>}",
+				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix_1>]}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset_2>}",
+				"    ${6:[, orientation, (OrientationMatrix)<relative_orientation_matrix_2>]}"],
+			"description": "Revolute rotation joint. Equivalent to a revolute hinge joint without any positional constraint."
+		  },
+		  "joint-rod": {
+			"prefix": "rod",
+			"body": [
+				"rod,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>},",
+				"  ${3:<node_2_label>},",
+				"    ${4:[position, ] (Vec3)<relative_offset_2>},",
+				"  ${5|(real)<rod_length>,from nodes|},",
+				"  ${6:(ConstitutiveLaw<1D>)<const_law>}"],
+			"description": "Rod joint element. Axial strain and axial strain rate are used in constitutive law."
+		  },
+		  "joint-spherical-hinge": {
+			"prefix": "spherical hinge",
+			"body": [
+				"spherical hinge,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>}",
+				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix_1>]}",
+				"  ${4:<node_2_label>},",
+				"    ${5:[position, ] (Vec3)<relative_offset_2>}",
+				"    ${6:[, orientation, (OrientationMatrix)<relative_orientation_matrix_2>]}"],
+			"description": "Spherical hinge joint. Relative orientation offsets are used for output purposes only."
+		  },
+		  "joint-total-joint": {
+			"prefix": "total joint",
+			"body": [
+				"total joint,",
+				"  ${1:<node_1_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset_1>}",
+				"    ${3:[, position orientation, (OrientationMatrix)<rel_pos_orientation_matrix_1>]}",
+				"    ${4:[, rotation orientation, (OrientationMatrix)<rel_rot_orientation_matrix_1>]}",
+				"  ${5:<node_2_label>},",
+				"    ${6:[position, ] (Vec3)<relative_offset_2>}",
+				"    ${7:[, position orientation, (OrientationMatrix)<rel_pos_orientation_matrix_2>]}",
+				"    ${8:[, rotation orientation, (OrientationMatrix)<rel_rot_orientation_matrix_2>]}",
+				"  , position constraint,",
+				"          ${10|inactive,active,position,velocity|}, ${11|inactive,active,position,velocity|}, ${12|inactive,active,position,velocity|},",
+				"          ${13:(TplDriveCaller<Vec3>)<imposed_relative_position>}",
+				"  , orientation constraint,",
+				"          ${14|inactive,active,rotation,angular velocity|}, ${15|inactive,active,rotation,angular velocity|}, ${16|inactive,active,rotation,angular velocity|},",
+				"          ${17:(TplDriveCaller<Vec3>)<imposed_relative_orientation>}"],
+			"description": "Total joint element"
+		  },
+		  "joint-total-pin-joint": {
+			"prefix": "total pin joint",
+			"body": [
+				"total pin joint,",
+				"  ${1:<node_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset>}",
+				"    ${3:[, position orientation, (OrientationMatrix)<rel_pos_orientation_matrix>]}",
+				"    ${4:[, rotation orientation, (OrientationMatrix)<rel_rot_orientation_matrix>]}",
+				"    ${5:[position, ] (Vec3)<absolute_position>}",
+				"    ${6:[, position orientation, (OrientationMatrix)<abs_pos_orientation_matrix_2>]}",
+				"    ${7:[, rotation orientation, (OrientationMatrix)<abs_rot_orientation_matrix_2>]}",
+				"  , position constraint,",
+				"          ${8|inactive,active,position,velocity|}, ${9|inactive,active,position,velocity|}, ${10|inactive,active,position,velocity|},",
+				"          ${11:(TplDriveCaller<Vec3>)<imposed_absolute_position>}",
+				"  , orientation constraint,",
+				"          ${12|inactive,active,rotation,angular velocity|}, ${13|inactive,active,rotation,angular velocity|}, ${14|inactive,active,rotation,angular velocity|},",
+				"          ${15:(TplDriveCaller<Vec3>)<imposed_relative_orientation>}"],
+			"description": "Total pin joint element. Equivalent to a total joint element when one node is grounded."
+		  },
+		  "joint-viscous-body": {
+			"prefix": "viscous body",
+			"body": [
+				"viscous body,",
+				"  ${1:node_label>},",
+				"    ${2:[position, ] (Vec3)<relative_offset>}",
+				"    ${3:[, position orientation, (OrientationMatrix)<rel_pos_orientation_matrix>]}",
+				"    ${4:(ConstitutiveLaw<6D>)<const_law>}"],
+			"description": "Viscous body joint element. Defines forces and moments depending on absolute linear and angular velocity of node. See also the deformable joint element."
+		  },
+		  "stream-output-values": {
+			"prefix": "values",
+			"body": [
+				"values,",
+				"    ${1:<channel_number>},",
+				"      ${2|[nodedof\\, ] (NodeDof) <output_dof>\\, [...],drive\\, (DriveCaller) <drive_data> \\, [...]|}"],
+			"description": "Stream output content of type values"
+		  },
+		  "stream-output-motion": {
+			"prefix": "motion",
+			"body": [
+				"motion,",
+				"  ${1:[output flags,\n    { position\n      | orientation matrix\n      | orientation matrix transpose\n      | velocity\n      | angular velocity\n      [, ... ] , \\}]}",
+				"  ${2|all,<struct_node_label>\\, [\\, ...] |}"],
+			"description": "Stream output content of type motion"
+		  },
+		  "control-data-block-template": {
+			"prefix": "begin: control data;",
+			"body": [
+				"begin: control data;",
+				"    structural nodes:",
+				"        $1",
+				"    ;",
+				"    rigid bodies:",
+				"        $2",
+				"    ;",
+				"    joints:",
+				"        $3",
+				"    ;",
+				"    $0",
+				"",
+				"    output results: netcdf;",
+				"end: control data;"
+			],
+			"description": "Begin enumeration of control data"
+		},
+		"node-block-template": {
+			"prefix": "begin: nodes;",
+			"body": [
+				"begin: nodes;",
+				"    $0",
+				"end: nodes;"
+			],
+			"description": "Begin definition of nodes"
+		},
+		"element-block-template": {
+			"prefix": "begin: elements;",
+			"body": [
+				"begin: elements;",
+				"    $0",
+				"end: elements;"
+			],
+			"description": "Begin definition of elements"
+		},
+		"set-statement": {
+			"prefix": "set",
+			"body": ["set: ${1|bool,integer,real,string|} ${2:name} = ${3:value};"],
+			"description": "Set a variable"
+		}
+
+	}
+}

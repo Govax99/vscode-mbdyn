@@ -1,0 +1,104 @@
+{
+	"scopeName": "source.mbdyn",
+	"name": "MBDyn",
+	"fileTypes": [
+		"mbd",
+		"mbdyn",
+		"mdl",
+		"set",
+		"ref",
+		"nod",
+		"elm"
+	],
+	"patterns": [
+		{
+			"include": "#linecomment"
+		},
+		{
+			"include": "#multilinecomment"
+		},
+		{
+			"include": "#object"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#cards"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#number"
+		},
+		{
+			"include": "#blocktype"
+		},
+		{
+			"include": "#macro"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.mbdyn",
+				"match": "\\b(real|integer|bool|string|const|null|eye|uniform|ifndef|diag|node|global|pi|e|Time|reference|modified|dynamic|static|position|velocity|angular|rotation|orientation|other|constraint|linear|viscous|viscoelastic|proportional|same|hydraulic|abstract|direction|generic|incompressible|compressible|fluid|active|inactive|gravity|netcdf)\\b"
+			}]
+		},
+		"strings": {
+			"name": "string.quoted.double.mbdyn",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.mbdyn",
+					"match": "\\\\."
+				}
+			]
+		},
+		"multilinecomment": {
+			"name": "comment.block.mbdyn",
+			"begin": "/\\*",
+			"end": "\\*/"
+		},
+		"cards": {
+			"patterns": [{
+				"name": "variable.other.event.mbdyn",
+				"match": "\\b(begin|end)\\b"
+			}]
+		},
+		"blocktype": {
+			"patterns": [{
+				"name": "entity.name.type.mbdyn",
+				"match": "(?<=begin|end):\\s*(control data|data|nodes|drivers|elements|initial value|inverse dynamics)\\b"
+			}]
+		},
+		"object": {
+			"patterns": [{
+				"name": "storage.type.struct.mbdyn",
+				"match": "\\b(set|body|joint|gravity|joints|structural|hydraulic|hydraulic fluid|structural nodes|rigid bodies|problem|reference|initial time|final time|time step|max iterations|tolerance|derivatives coefficient|output results|beams|hydraulic nodes|hydraulic elements|genels|forces|method|derivatives max iterations|derivatives tolerance|beam|force|genel|newton raphson)(?=\\s*:)"
+			}]
+		},
+		"linecomment": {
+			"patterns": [{
+				"name": "comment.line.hash.mbdyn",
+				"match": "#.*$"
+			}]
+		},
+		"number": {
+			"patterns": [{
+				"name": "constant.numeric.mbdyn",
+				"match": "\\b-?\\d+(?:\\.\\d*)?(?:[eE][+-]?\\d+)?\\b"
+			}]
+		},
+		"macro": {
+			"patterns": [{
+				"name": "entity.name.function.macro.mbdyn",
+				"match": "\\b[A-Z_0-9]+\\b"
+			}]
+		}
+
+
+	}
+}

@@ -1,0 +1,113 @@
+{
+	"scopeName": "source.mbdyn",
+	"name": "MBDyn",
+	"fileTypes": [
+		"mbd",
+		"mbdyn",
+		"mdl",
+		"set",
+		"ref",
+		"nod",
+		"elm"
+	],
+	"patterns": [
+		{
+			"include": "#linecomment"
+		},
+		{
+			"include": "#multilinecomment"
+		},
+		{
+			"include": "#object"
+		},
+		{
+			"include": "#specifier"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#cards"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#number"
+		},
+		{
+			"include": "#blocktype"
+		},
+		{
+			"include": "#function"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.mbdyn",
+				"match": "\\b(real|integer|bool|string|const|null|eye|ifndef|diag|node|pi|e|reference|position|velocity|angular|rotation|orientation|other|constraint|same|direction|fluid|active|inactive|netcdf|global|modify residual test|modified|Time|TimeStep|Step|Var|FALSE|TRUE|INT_MAX|INT_MIN|RAND_MAX|REAL_MAX|REAL_MIN|in2m|m2in|in2mm|mm2in|ft2m|m2ft|lb2kg|kg2lb|deg2rad|rad2deg|slug2kg|kg2slug|no|yes|prestress|output sparse matrices|output eigenvectors|output geometry|matrix output precision|results output precision|parameter|lower frequency limit|upper frequency limit|use lapack|scale|permute|all|use arpack|use jdqz|output|balance)\\b"
+			}]
+		},
+		"strings": {
+			"name": "string.quoted.double.mbdyn",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.mbdyn",
+					"match": "\\\\."
+				}
+			]
+		},
+		"multilinecomment": {
+			"name": "comment.block.mbdyn",
+			"begin": "/\\*",
+			"end": "\\*/"
+		},
+		"cards": {
+			"patterns": [{
+				"name": "variable.other.event.mbdyn",
+				"match": "\\b(begin|end)\\b"
+			}]
+		},
+		"blocktype": {
+			"patterns": [{
+				"name": "entity.name.type.mbdyn",
+				"match": "(?<=begin:|end:|problem:|method:)\\s*\\b(control data|data|nodes|drivers|elements|initial value|inverse dynamics|crank nicholson|newton raphson|bdf)\\b"
+			}]
+		},
+		"specifier": {
+			"patterns": [{
+				"name": "support.type.mbdyn",
+				"match": "\\b(array|closest next|const|cosine|cubic|dof|double ramp|double step|drive|element|exponential|file|fourier series|frequency sweep|ginac|linear|meter|mult|parabolic|periodic|piecewise linear|postponed|ramp|random|sample and hold|scalar function|sine|step|string|tanh|factor|change|ms|linear elastic|linear elastic generic|linear elastic generic axial torsion coupling|cubic elastic generic|inverse square elastic|log elastic|linear elastic bistop|double linear elastic|isotropic hardening elastic|scalar function elastic orthotropic|linear viscous|linear viscous isotropic|linear viscous generic|linear viscoelastic|linear viscoelastic isotropic|linear viscoelastic generic|linear time variant viscoelastic generic|linear viscoelastic generic axial torsion coupling|cubic viscoelastic generic|double linear viscoelastic|turbulent viscoelastic|linear viscoelastic bistop|shock absorber|symbolic elastic|symbolic viscous|symbolic viscoelastic|ann elastic|ann viscoelastic|nlsf viscoelastic|nlsf elastic|nlsf viscous|nlp viscoelastic|nlp elastic|nlp viscous|bistop|invariant angular|dynamic|static|static displacement|dynamic displacement|modal|dummy|offset|relative frame|assembly|sample and hold|beam strain gage|structural|electric|abstract|hydraulic|range|fixed step|variable step|socket|RTAI input|stream|std|front 1D|scalar function|power law|file|rotor|dynamic inflow|ground|delay|max iterations|eta|tolerance|correction|initial value|accelerometer|displacement|motor|discrete control|abstract internal|absolute|absolute internal|follower|follower internal|total|total internal|external structural|external structural mapping|external modal|external modal mapping|absolute|absolute internal|follower internal|control|identification|adaptive control|gpc|deadbeat|clamp|distance|spring|spring support|cross spring support|mass|scalar filter|state space SISO|state space MIMO|swashplate|rotor trim|uniform|central|actuator|minor loss|three way minor loss|control valve|dynamic control valve|pressure flow control valve|pressure valve|flow valve|orifice|pipe|dynamic pipe|incompressible|linear compressible|linear thermal compressible|super|angular acceleration|angular velocity|axial rotation|brake|cardano hinge|cardano pin|cardano rotation|deformable axial joint|deformable displacement joint|deformable hinge|deformable joint|drive displacement|drive displacement pin|drive hinge|gimbal rotation|imposed displacement|imposed displacement pin|in line|in plane|invariant deformable hinge|linear acceleration|linear velocity|prismatic|revolute hinge|revolute pin|revolute rotation|rod|spherical hinge|total joint|total pin joint|viscous body|values|motion|distance with offset|rod with offset|induced velocity|hinge|component|node dof|joint|algebraic|matrix A|matrix B|matrix C|matrix D|direct|linear elastic isotropic|body|bdf)(?=\\s*,)\\b"
+			}]
+		},
+		"object": {
+			"patterns": [{
+				"name": "storage.type.struct.mbdyn",
+				"match": "\\b(reference|constitutive law|c81 data|drive caller|template drive caller|module load|setenv|hydraulic fluid|initial time|final time|strategy|min time step|max time step|time step|tolerance|max iterations|method|eigenanalysis|structural|asbtract|electric|hydraulic|parameter|output|file|aerodynamic body|aerodynamic beam2|aerodynamic beam3|aeromodal|aircraft instruments|air properties|generic aerodynamic force|induced velocity|automatic structural|beam3|beam2|body|bulk|electric|force|couple|genel|gravity|hydraulic|joint regularization|joint|stream output|set|beam|driven|derivatives coefficient|derivatives max iterations|derivatives tolerance|abstract|abstract node|structural node|rigid bodies|problem|inertia)s?(?=\\s*[:;])"
+			}]
+		},
+		"linecomment": {
+			"patterns": [{
+				"name": "comment.line.hash.mbdyn",
+				"match": "#.*$"
+			}]
+		},
+		"number": {
+			"patterns": [{
+				"name": "constant.numeric.mbdyn",
+				"match": "\\b(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((E|e)(\\+|-)?[0-9]+)?\\b"
+			}]
+		},
+		"function": {
+			"patterns": [{
+				"name": "variable.other.constant.mbdyn",
+				"match": "[\\w:]+(?=\\()"
+			}]
+		}
+
+
+	}
+}
