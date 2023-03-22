@@ -1,6 +1,6 @@
 {
 	"name": "mbdyn-lang",
-	"displayName": "MBDyn Lang",
+	"displayName": "MBDyn",
 	"description": "Syntax highlighting and code completion for mbdyn .mbd files",
 	"icon": "images/spellIcon.png",
 	"author": "govax",
