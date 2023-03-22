@@ -5,7 +5,7 @@
 	"icon": "images/spellIcon.png",
 	"author": "govax",
 	"license": "MIT",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Govax99/vscode-mbdyn.git"
@@ -46,17 +46,26 @@
 		"languages": [
 			{
 				"id": "mbdyn",
-				"aliases": ["MBDyn", "mbdyn"],
-				"extensions": [".mbd",".mbdyn",".set",".elm",".nod"],
+				"aliases": [
+					"MBDyn",
+					"mbdyn"
+				],
+				"extensions": [
+					".mbd",
+					".mbdyn",
+					".set",
+					".elm",
+					".nod"
+				],
 				"configuration": "./language-configuration.json"
-		  }
+			}
 		],
 		"grammars": [
 			{
 				"language": "mbdyn",
 				"scopeName": "source.mbdyn",
 				"path": "./syntaxes/mbdyn.tmLanguage.json"
-		  }
+			}
 		],
 		"snippets": [
 			{
