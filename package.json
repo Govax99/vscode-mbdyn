@@ -2,14 +2,15 @@
 	"name": "mbdyn-lang",
 	"displayName": "MBDyn Lang",
 	"description": "Syntax highlighting and code completion for mbdyn .mbd files",
+	"icon": "images/spellIcon.png",
 	"author": "govax",
 	"license": "MIT",
 	"version": "1.0.0",
 	"repository": {
 		"type": "git",
-		"url": ""
+		"url": "https://github.com/Govax99/vscode-mbdyn.git"
 	},
-	"publisher": "vscode-samples",
+	"publisher": "davide-zamblera",
 	"categories": [],
 	"keywords": [
 		"multi-root ready"
