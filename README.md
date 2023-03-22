@@ -1,6 +1,7 @@
 # MBDyn extension for Visual Studio Code
 
 MBDyn LSP for VScode, the extension can be found on the marketplace at: https://marketplace.visualstudio.com/items?itemName=davide-zamblera.mbdyn-lang
+You can find out more about MBDyn at: https://www.mbdyn.org/
 
 ## Supported file types
 
