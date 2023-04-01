@@ -385,7 +385,7 @@
 				  "no change;;"],
 			  "description": "Strategy for time step change: no change. WARNING: this disables termination of max iterations"
 		},
-		"Data block": {
+		"data-block": {
 			"prefix": "begin: data;",
 			"body": [
 				"begin: data;",
@@ -395,7 +395,7 @@
 			],
 			"description": "Begin data, choice of problem type"
 		},
-		"Initial value block": {
+		"initial-value-block": {
 			"prefix": "begin: initial value;",
 			"body": [
 				"begin: initial value;",
@@ -2559,6 +2559,9 @@
 				"    ;",
 				"    joints:",
 				"        $3",
+				"    ;",
+				"    forces:",
+				"        $4",
 				"    ;",
 				"    $0",
 				"",

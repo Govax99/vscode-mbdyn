@@ -251,6 +251,7 @@ connection.onCompletion(
 			{ label: 'compressible', kind: CompletionItemKind.Text, data: 3 },
 			{ label: 'incompressible', kind: CompletionItemKind.Text, data: 3 },
 			{ label: 'fluid', kind: CompletionItemKind.Text, data: 3 },
+			{ label: 'skip initial joint assembly', kind: CompletionItemKind.Text, data: 3 },
 			{ label: 'ifndef', kind: CompletionItemKind.Text, data: 4 },
 			{ label: 'const', kind: CompletionItemKind.Text, data: 5 },
 			{ label: 'Time', kind: CompletionItemKind.Text, data: 6 },

@@ -21,11 +21,7 @@
         ["(", ")"],
         ["\"", "\""],
         ["'", "'"]
-    ],
-    "indentationRules": {
-        "increaseIndentPattern": "^((?!#).)*(begin\\s*:\\s*\\w+\\s*\\w+\\s*;|begin\\s*:\\s*\\w+\\s*;)[^;\"'`]*$",
-        "decreaseIndentPattern": "^((?!#).)*(end\\s*:\\s*\\w+;)$",
-    },
+    ]
 
 
 }
