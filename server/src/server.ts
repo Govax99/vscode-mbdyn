@@ -241,6 +241,7 @@ connection.onCompletion(
 			{ label: 'crank nicolson', kind: CompletionItemKind.Text, data: 3 },
 			{ label: 'position', kind: CompletionItemKind.Text, data: 3 },
 			{ label: 'orientation', kind: CompletionItemKind.Text, data: 3 },
+			{ label: 'rotation', kind: CompletionItemKind.Text, data: 3 },
 			{ label: 'constraint', kind: CompletionItemKind.Text, data: 3 },
 			{ label: 'proportional', kind: CompletionItemKind.Text, data: 3 },
 			{ label: 'viscoelastic', kind: CompletionItemKind.Text, data: 3 },
@@ -252,6 +253,7 @@ connection.onCompletion(
 			{ label: 'incompressible', kind: CompletionItemKind.Text, data: 3 },
 			{ label: 'fluid', kind: CompletionItemKind.Text, data: 3 },
 			{ label: 'skip initial joint assembly', kind: CompletionItemKind.Text, data: 3 },
+			{ label: 'residual', kind: CompletionItemKind.Text, data: 3 },
 			{ label: 'ifndef', kind: CompletionItemKind.Text, data: 4 },
 			{ label: 'const', kind: CompletionItemKind.Text, data: 5 },
 			{ label: 'Time', kind: CompletionItemKind.Text, data: 6 },
@@ -441,8 +443,8 @@ connection.onCompletionResolve(
 					case 'constitutive law:': item.documentation = ['Constitutive laws are grouped by their dimensionality dim, which (up to now) can be any of 1, 3 and 6.'].join("\n"); break;
 					case 'c81 data:': item.documentation = ['This keyword allows to deﬁne and read the c81 dataairfoil tables that are used by aerodynamic elements.'].join("\n"); break;
 					case 'drive caller:': item.documentation = ['Allows to deﬁne a drive caller that can be subsequently reused. It is useful essentially in two cases:','a) to deﬁne a drive that will be used many times throughout a model;', ' to deﬁne a drive that needs to be used in a later deﬁned part of a model, in order to make it parametric.'].join("\n"); break;
-					case 'hydraulic fluid:': item.documentation = ['Allows to deﬁne a hydraulic ﬂuid to be later used in hydraulic elements'].join("\n"); break;
-					case 'include:': item.documentation = ['Allows to include the contents of the ﬁle file_name, which must be a valid ﬁlename for the operating', 'system in use. The ﬁle name must be enclosed in double quotes ("). The full (absolute or relative) path', 'must be given if the included ﬁle is not in the directory of the including one.'].join("\n"); break;
+					case 'hydraulic fluid:': item.documentation = ['Allows to deﬁne a hydraulic fluid to be later used in hydraulic elements'].join("\n"); break;
+					case 'include:': item.documentation = ['Allows to include the contents of the file file_name, which must be a valid ﬁlename for the operating', 'system in use. The ﬁle name must be enclosed in double quotes ("). The full (absolute or relative) path', 'must be given if the included ﬁle is not in the directory of the including one.'].join("\n"); break;
 					case 'print symbol table:': item.documentation = ['allows to print to standard output the contents of the parser’s symbol table at any stage of the input', 'phase. This may be useful for model debugging purposes.'].join("\n"); break;
 					case 'reference:': item.documentation = ['A reference system is declared and deﬁned.'].join("\n"); break;
 				} break;

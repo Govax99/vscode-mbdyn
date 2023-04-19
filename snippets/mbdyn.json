@@ -1299,7 +1299,7 @@
 		  "joint-regulatization-element": {
 			"prefix": "joint regularization:",
 			"body": [
-				"joint regularization: ${1:<joint_label>}, tikhonov, ${2:(real)<coef>};"],
+				"joint regularization: ${1:<joint_label>}, tikhonov, ${2|(real)<coef>,list\\, <coef_1> [ \\, ... ]|};"],
 			"description": "Joint regularization element. Used to modify algebraic constraints in order to improve ill-conditioned problems."
 		  },
 		  "joint-element": {
