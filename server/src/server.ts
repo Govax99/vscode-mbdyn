@@ -331,7 +331,6 @@ connection.onCompletion(
 			{ label: 'include:', kind: CompletionItemKind.Text, data: 8 },
 			{ label: 'module load:', kind: CompletionItemKind.Text, data: 8 },
 			//{ label: 'print symbol table:', kind: CompletionItemKind.Text, data: 8 },
-			{ label: 'reference:', kind: CompletionItemKind.Text, data: 8 },
 			{ label: 'direct', kind: CompletionItemKind.Text, data: 9 },
 			{ label: 'time', kind: CompletionItemKind.Text, data: 9 },
 			{ label: 'timestep', kind: CompletionItemKind.Text, data: 9 },
@@ -350,13 +349,12 @@ connection.onCompletionResolve(
 					case 'begin:': item.documentation = 'Begin block of code'; break;
 					case 'end:': item.documentation = 'End block of code'; break;
 					case 'set': item.documentation = item.documentation = [ "Set variable value for the rest of the text file.", "Example:", "set: type name = value" ].join("\n"); break;
-					case 'reference:': item.documentation = 'Begin reference definition'; break;
 					case 'include:': item.documentation = 'Include statement. Allows to include the contents of file_name into the current input file.'; break;
 				} break;
 			case 2: item.detail = 'Built-in type'; item.documentation = [ "Specify variable type.", "Example:", "set: <type> name = value" ].join("\n"); break;
 			case 3: item.detail = 'Miscellaneous keywords';
 				switch (item.label) {
-					case 'reference': item.documentation = 'Explicit reference to element'; break;
+					case 'reference': item.documentation = 'Keyword to specify quantity with respect to an already defined element'; break;
 					default: item.documentation = ''; break;
 				} break;
 			case 4: item.detail = 'Declaration modifier'; item.documentation = [ "The ifndef modifier prevents the declaration from being overwritten if it has already been declared.", "Example:", "ifndef: type name = value" ].join("\n"); break;
@@ -446,7 +444,6 @@ connection.onCompletionResolve(
 					case 'hydraulic fluid:': item.documentation = ['Allows to deﬁne a hydraulic fluid to be later used in hydraulic elements'].join("\n"); break;
 					case 'include:': item.documentation = ['Allows to include the contents of the file file_name, which must be a valid ﬁlename for the operating', 'system in use. The ﬁle name must be enclosed in double quotes ("). The full (absolute or relative) path', 'must be given if the included ﬁle is not in the directory of the including one.'].join("\n"); break;
 					case 'print symbol table:': item.documentation = ['allows to print to standard output the contents of the parser’s symbol table at any stage of the input', 'phase. This may be useful for model debugging purposes.'].join("\n"); break;
-					case 'reference:': item.documentation = ['A reference system is declared and deﬁned.'].join("\n"); break;
 				} break;
 				case 9: item.detail = 'Drive';
 				switch (item.label) {

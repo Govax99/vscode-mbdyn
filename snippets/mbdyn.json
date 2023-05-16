@@ -4,7 +4,7 @@
 		  "prefix": "reference:",
 		  "body": [
 			"reference: ${1:<label>},",
-			"  ${2:[name, \"name\",]},",
+			"  ${2:[name, \"name\",]}",
 			"  ${3:(Vec3)<absolute_position>},",
 			"  ${4:(OrientationMatrix)<absolute_orientation_matrix>},",
 			"  ${5:(Vec3)<absolute_velocity>},",
@@ -1236,7 +1236,7 @@
 		  "body-element": {
 			"prefix": "body:",
 			"body": [
-				"body: ${1:<label>}, ${2:<node_label>}",
+				"body: ${1:<label>}, ${2:<node_label>},",
 				"  ${3|<one_body>,<one_pointmass>,variable mass\\, <one_vm_body>,condense\\, <num_masses>\\, { <one_body \\| <one_pointmass> }\\, [\\, ...]|}"],
 			"description": "Body element"
 		  },
@@ -1357,9 +1357,9 @@
 			"prefix": "one_body",
 			"body": [
 				"${1:(real)<mass>},",
-				"  ${2:(Vec3)<relative_center_of_mass>},",
+				"${2:(Vec3)<relative_center_of_mass>},",
 				"${3:(Mat3x3)<inertia_matrix>}",
-				"  ${4:[, inertial, {node | (OrientationMatrix)<orientation_matrix>\\} ]};"],
+				"${4:[, inertial, {node | (OrientationMatrix)<orientation_matrix>\\} ]};"],
 			"description": "One body (rigid, constant mass)."
 		  },
 		  "body-one-pointmass": {
@@ -2443,7 +2443,9 @@
 				"  ${1:<node_label>},",
 				"    ${2:[position, ] (Vec3)<relative_offset>}",
 				"    ${3:[, orientation, (OrientationMatrix)<relative_orientation_matrix>]}",
-				"  ${4:[, initial theta, (real)<initial_theta>]}"],
+				"  ${4:position, (Vec3) <absolute_pin_position>}",
+				"  ${5:[, orientation, (OrientationMatrix) <absolute_pin_orientation_matrix> ]}",
+				"  ${6:[, initial theta, (real)<initial_theta>]}"],
 			"description": "Revolute pin joint. Equivalent to a revolute hinge joint when one node is grounded."
 		  },
 		  "joint-revolute-rotation": {
